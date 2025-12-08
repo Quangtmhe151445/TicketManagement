@@ -1,0 +1,61 @@
+/* Grid tổng: 1 cột giờ + 7 cột ngày */
+.calendar-grid {
+  display: grid;
+  grid-template-columns: 80px repeat(7, 1fr);
+  border: 1px solid #dee2e6;
+  background-color: #f8f9fa;
+  font-family: "Segoe UI", sans-serif;
+}
+
+/* Header: ngày trong tuần */
+.calendar-header {
+  background-color: #0d6efd;
+  color: white;
+  padding: 12px;
+  font-weight: bold;
+  text-align: center;
+  border: 1px solid #dee2e6;
+}
+
+/* Ô giờ bên trái */
+.calendar-time {
+  background-color: #f1f3f5;
+  font-weight: 500;
+  padding: 10px;
+  text-align: center;
+  border: 1px solid #dee2e6;
+}
+
+/* Ô trống trong bảng */
+.calendar-cell {
+  min-height: 60px;
+  padding: 6px;
+  border: 1px solid #dee2e6;
+  position: relative;
+  transition: background-color 0.3s;
+}
+
+.calendar-cell:hover {
+  background-color: #e2e6ea;
+}
+
+/* Hộp hiển thị sự kiện */
+.event-box {
+  background-color: #e7f1ff;
+  border-left: 4px solid #0d6efd;
+  padding: 8px 10px;
+  border-radius: 8px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.95rem;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+  cursor: pointer;
+}
+
+/* Nút x */
+.event-box button {
+  padding: 2px 6px;
+  font-size: 0.75rem;
+  line-height: 1;
+}
