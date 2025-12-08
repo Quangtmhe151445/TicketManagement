@@ -55,9 +55,7 @@ function Timetable({ events = [], onDelete, onEdit, staff }) {
                   <div
                     className="event-box"
                     onClick={() => {
-                      if (staff?.role === "admin") {
-                        onEdit(event); // chỉ admin được edit
-                      }
+                      onEdit(event); // chỉ admin được edit
                     }}
                   >
                     <div className="fw-bold">{event.title}</div>

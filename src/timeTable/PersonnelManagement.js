@@ -107,10 +107,8 @@ function App() {
                   editingEvent={editingEvent}
                   cancelEdit={cancelEdit}
                   staffList={staffList}
+                  staff={staff}
                 />
-                <div className="mt-3 text-muted" style={{ fontSize: "0.9rem" }}>
-                  📌 Click an event to edit it.
-                </div>
               </Card.Body>
             </Card>
           </Col>
@@ -126,9 +124,10 @@ function App() {
                   updateEvent={updateEvent}
                   editingEvent={editingEvent}
                   staffList={staffList}
+                  staff={staff}
                 />
                 <div className="mt-3 text-muted" style={{ fontSize: "0.9rem" }}>
-                  📌 Click an event to view it.
+                  📌 Click an card to view it.
                 </div>
               </Card.Body>
             </Card>

@@ -6,6 +6,7 @@ const EventForm = ({
   updateEvent,
   editingEvent,
   cancelEdit,
+  staff,
   staffList = [],
 }) => {
   const [title, setTitle] = useState(""); // Tên nhân viên
@@ -15,6 +16,8 @@ const EventForm = ({
 
   // Khi bấm Edit → load dữ liệu vào form
   useEffect(() => {
+    console.log("EventForm STAFF:", staff);
+
     if (editingEvent) {
       setTitle(editingEvent.title);
       setDay(editingEvent.day);

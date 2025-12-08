@@ -16,7 +16,16 @@ const Login = ({ onLogin }) => {
         console.log("Users từ server:", users);
 
         if (users.length > 0) {
-          onLogin(users[0]);
+          const user = users[0]; // Đây là user đăng nhập
+          console.log("Role:", user.role);
+
+          // Gửi user đầy đủ (bao gồm role) sang App
+          onLogin({
+            id: user.id,
+            name: user.name,
+            username: user.username,
+            role: user.role,
+          });
         } else {
           alert("Invalid username or password");
         }
