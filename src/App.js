@@ -1,19 +1,30 @@
+
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import MyNav from "./navbar.js";
 import MovieList from "./movie_management/list-movie.js";
 import MyFooter from "./footer.js";
+import Ticket from "./TicketManager/TicketManager.js";
+import PopCornManager from "./PopCorn/PopCornManager.js";
 
 function App() {
   return (
     <Router>
       <MyNav />
 
+      
       <Routes>
-        <Route path="/movie-list" element={<MovieList />} />
+        <Route path="/movie-list" element={<MovieList />}  />
+      </Routes>
+       <Routes>
+        <Route path="/ticket" element={<Ticket />}  />
+      </Routes>
+      <Routes>
+        <Route path="/popcorn" element={<PopCornManager />}  />
       </Routes>
 
       <MyFooter/>
     </Router>
+
   );
 }
 
