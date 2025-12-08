@@ -148,6 +148,7 @@
       "username": "an_checkin",
       "password": "hashed_password",
       "shift": ["2025-12-08T12:00:00", "2025-12-08T20:00:00"]
+
     }
   ]
 }
