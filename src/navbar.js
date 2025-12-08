@@ -23,6 +23,14 @@ function MyNav() {
               Movies
             </Nav.Link>
 
+            <Nav.Link as={Link} to="/ticket">
+              Ticket
+            </Nav.Link>
+
+             <Nav.Link as={Link} to="/popcorn">
+              PopCorn
+            </Nav.Link>
+
             <NavDropdown title="More" id="navbarScrollingDropdown">
               <NavDropdown.Item as={Link} to="/action">Action</NavDropdown.Item>
               <NavDropdown.Item as={Link} to="/something">
