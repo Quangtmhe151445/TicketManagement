@@ -9,6 +9,8 @@ import {
   InputGroup,
   Badge,
 } from "react-bootstrap";
+import EditTicket from "./EditTicketPage";
+
 
 const mockTicketPrices = [
   {
@@ -184,6 +186,9 @@ function TicketManagement() {
             </Table>
           </div>
         </Col>
+
+        <EditTicket/>
+
       </Row>
     </Container>
   );
