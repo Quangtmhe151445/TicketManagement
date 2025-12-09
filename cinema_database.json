@@ -95,14 +95,6 @@
   ],
   "work schedule": [
     {
-      "id": "1765182128544",
-      "title": "Thi Hoa",
-      "day": "Monday",
-      "time": "08:00",
-      "endTime": "09:00",
-      "week": "2025-12-08"
-    },
-    {
       "id": "1765182187868",
       "title": "Thi Hoa",
       "day": "Friday",
@@ -116,14 +108,6 @@
       "day": "Wednesday",
       "time": "08:00",
       "endTime": "09:00",
-      "week": "2025-12-08"
-    },
-    {
-      "id": "1765203166016",
-      "title": "Phuoc An",
-      "day": "Monday",
-      "time": "13:00",
-      "endTime": "14:00",
       "week": "2025-12-08"
     },
     {
