@@ -1,0 +1,210 @@
+{
+  "movies": [
+    {
+      "id": "mv001",
+      "title": "Avengers: Endgame",
+      "duration": 181,
+      "genre": [
+        "Action",
+        "Sci-fi"
+      ],
+      "rating": "C13",
+      "status": "now_showing",
+      "poster_url": "/images/movies/endgame.jpg",
+      "trailer_url": "https://youtube.com/abc",
+      "publisher": "Marvel Studios"
+    },
+    {
+      "id": "mv002",
+      "title": "Inside Out 2",
+      "duration": 110,
+      "genre": [
+        "Animation",
+        "Family"
+      ],
+      "rating": "P",
+      "status": "coming_soon",
+      "poster_url": "/images/movies/insideout2.jpg",
+      "trailer_url": "https://youtube.com/xyz",
+      "publisher": "Pixar"
+    }
+  ],
+  "cinema_rooms": [
+    {
+      "id": "room01",
+      "name": "Cinema Room 1",
+      "type": "2D",
+      "status": "active",
+      "seat_map": [
+        [
+          "A1",
+          "A2",
+          "A3",
+          "A4",
+          "A5"
+        ],
+        [
+          "B1",
+          "B2",
+          "B3",
+          "B4",
+          "B5"
+        ],
+        [
+          "C1",
+          "C2",
+          "C3",
+          "C4",
+          "C5"
+        ]
+      ],
+      "seat_types": {
+        "A": "VIP",
+        "B": "Standard",
+        "C": "Standard"
+      }
+    },
+    {
+      "id": "room02",
+      "name": "Cinema Room 2",
+      "type": "IMAX",
+      "status": "maintenance",
+      "seat_map": [
+        [
+          "A1",
+          "A2",
+          "A3"
+        ],
+        [
+          "B1",
+          "B2",
+          "B3"
+        ],
+        [
+          "C1",
+          "C2",
+          "C3"
+        ]
+      ],
+      "seat_types": {
+        "A": "VIP",
+        "B": "VIP",
+        "C": "Couple"
+      }
+    }
+  ],
+  "work schedule": [
+    {
+      "id": "1765182128544",
+      "title": "Thi Hoa",
+      "day": "Monday",
+      "time": "08:00",
+      "endTime": "09:00",
+      "week": "2025-12-08"
+    },
+    {
+      "id": "1765182187868",
+      "title": "Thi Hoa",
+      "day": "Friday",
+      "time": "08:00",
+      "endTime": "09:00",
+      "week": "2025-12-08"
+    },
+    {
+      "id": "1765183899115",
+      "title": "Phuoc An",
+      "day": "Wednesday",
+      "time": "08:00",
+      "endTime": "09:00",
+      "week": "2025-12-08"
+    },
+    {
+      "id": "1765203166016",
+      "title": "Phuoc An",
+      "day": "Monday",
+      "time": "13:00",
+      "endTime": "14:00",
+      "week": "2025-12-08"
+    },
+    {
+      "id": "1765203293402",
+      "title": "Thi Hoa",
+      "day": "Thursday",
+      "time": "08:00",
+      "endTime": "09:00",
+      "week": "2025-12-08"
+    }
+  ],
+  "tickets": [
+    {
+      "id": "tk001",
+      "showtime_id": "st001",
+      "seat": "A3",
+      "price": 120000,
+      "status": "sold",
+      "customer_name": "Tran Minh",
+      "buy_method": "counter"
+    },
+    {
+      "id": "tk002",
+      "showtime_id": "st001",
+      "seat": "B1",
+      "price": 100000,
+      "status": "canceled",
+      "customer_name": "Nguyen Van A",
+      "buy_method": "counter"
+    }
+  ],
+  "price_rules": [
+    {
+      "id": "pr001",
+      "type": "base_price",
+      "room_type": "2D",
+      "seat_type": "Standard",
+      "weekday": 90000,
+      "weekend": 110000,
+      "holiday": 130000
+    },
+    {
+      "id": "pr002",
+      "type": "base_price",
+      "room_type": "2D",
+      "seat_type": "VIP",
+      "weekday": 120000,
+      "weekend": 150000,
+      "holiday": 180000
+    },
+    {
+      "id": "pr003",
+      "type": "base_price",
+      "room_type": "IMAX",
+      "seat_type": "VIP",
+      "weekday": 150000,
+      "weekend": 190000,
+      "holiday": 230000
+    }
+  ],
+  "staff": [
+    {
+      "id": "1",
+      "name": "Admin",
+      "role": "admin",
+      "username": "admin_lam",
+      "password": "admin123"
+    },
+    {
+      "id": "sf002",
+      "name": "Thi Hoa",
+      "role": "ticket_staff",
+      "username": "hoa_ticket",
+      "password": "hashed_password"
+    },
+    {
+      "id": "sf003",
+      "name": "Phuoc An",
+      "role": "checkin_staff",
+      "username": "an_checkin",
+      "password": "hashed_password"
+    }
+  ]
+}
