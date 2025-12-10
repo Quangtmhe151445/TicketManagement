@@ -1,0 +1,127 @@
+{
+  "movies": [
+    {
+      "id": "mv001",
+      "title": "Dune: Part Two",
+      "duration": 166,
+      "rating": "C13",
+      "status": "now_showing"
+    },
+    {
+      "id": "mv002",
+      "title": "Oppenheimer",
+      "duration": 180,
+      "rating": "C16",
+      "status": "now_showing"
+    },
+    {
+      "id": "mv003",
+      "title": "Inside Out 2",
+      "duration": 110,
+      "rating": "P",
+      "status": "coming_soon"
+    }
+  ],
+  "cinema_rooms": [
+    {
+      "id": "room01",
+      "name": "Room 01",
+      "type": "2D Standard",
+      "status": "active",
+      "seat_types": {
+        "A": "Standard",
+        "B": "Standard",
+        "C": "VIP"
+      }
+    },
+    {
+      "id": "room02",
+      "name": "Room VIP",
+      "type": "3D IMAX",
+      "status": "active",
+      "seat_types": {
+        "A": "VIP",
+        "B": "VIP",
+        "C": "Couple"
+      }
+    },
+    {
+      "id": "room03",
+      "name": "Room 05",
+      "type": "2D Standard",
+      "status": "maintenance",
+      "seat_types": {
+        "A": "Standard",
+        "B": "VIP"
+      }
+    }
+  ],
+  "showtimes": [
+    {
+      "id": "st001",
+      "movie_id": "mv001",
+      "room_id": "room01",
+      "start_time": "2025-12-15T10:00:00",
+      "end_time": "2025-12-15T12:46:00",
+      "status": "open"
+    },
+    {
+      "id": "st002",
+      "movie_id": "mv002",
+      "room_id": "room02",
+      "start_time": "2025-12-15T13:00:00",
+      "end_time": "2025-12-15T16:00:00",
+      "status": "open"
+    },
+    {
+      "id": "st003",
+      "movie_id": "mv001",
+      "room_id": "room01",
+      "start_time": "2025-12-15T15:00:00",
+      "end_time": "2025-12-15T17:46:00",
+      "status": "open"
+    },
+    {
+      "id": "st004",
+      "movie_id": "mv002",
+      "room_id": "room02",
+      "start_time": "2025-12-15T18:00:00",
+      "end_time": "2025-12-15T21:00:00",
+      "status": "sold_out"
+    }
+  ],
+  "price_rules": [
+    {
+      "id": "pr001",
+      "room_type": "2D Standard",
+      "seat_type": "Standard",
+      "weekday": 90000,
+      "weekend": 110000,
+      "holiday": 130000
+    },
+    {
+      "id": "pr002",
+      "room_type": "2D Standard",
+      "seat_type": "VIP",
+      "weekday": 110000,
+      "weekend": 130000,
+      "holiday": 150000
+    },
+    {
+      "id": "pr003",
+      "room_type": "3D IMAX",
+      "seat_type": "VIP",
+      "weekday": 150000,
+      "weekend": 190000,
+      "holiday": 230000
+    },
+    {
+      "id": "pr004",
+      "room_type": "3D IMAX",
+      "seat_type": "Couple",
+      "weekday": 250000,
+      "weekend": 300000,
+      "holiday": 350000
+    }
+  ]
+}
