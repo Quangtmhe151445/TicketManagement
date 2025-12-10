@@ -4,10 +4,7 @@
       "id": "mv001",
       "title": "Avengers: Endgame",
       "duration": 181,
-      "genre": [
-        "Action",
-        "Sci-fi"
-      ],
+      "genre": ["Action", "Sci-fi"],
       "rating": "C13",
       "status": "now_showing",
       "poster_url": "/images/movies/endgame.jpg",
@@ -18,10 +15,7 @@
       "id": "mv002",
       "title": "Inside Out 2",
       "duration": 110,
-      "genre": [
-        "Animation",
-        "Family"
-      ],
+      "genre": ["Animation", "Family"],
       "rating": "P",
       "status": "coming_soon",
       "poster_url": "/images/movies/insideout2.jpg",
@@ -36,27 +30,9 @@
       "type": "2D",
       "status": "active",
       "seat_map": [
-        [
-          "A1",
-          "A2",
-          "A3",
-          "A4",
-          "A5"
-        ],
-        [
-          "B1",
-          "B2",
-          "B3",
-          "B4",
-          "B5"
-        ],
-        [
-          "C1",
-          "C2",
-          "C3",
-          "C4",
-          "C5"
-        ]
+        ["A1", "A2", "A3", "A4", "A5"],
+        ["B1", "B2", "B3", "B4", "B5"],
+        ["C1", "C2", "C3", "C4", "C5"]
       ],
       "seat_types": {
         "A": "VIP",
@@ -70,21 +46,9 @@
       "type": "IMAX",
       "status": "maintenance",
       "seat_map": [
-        [
-          "A1",
-          "A2",
-          "A3"
-        ],
-        [
-          "B1",
-          "B2",
-          "B3"
-        ],
-        [
-          "C1",
-          "C2",
-          "C3"
-        ]
+        ["A1", "A2", "A3"],
+        ["B1", "B2", "B3"],
+        ["C1", "C2", "C3"]
       ],
       "seat_types": {
         "A": "VIP",
