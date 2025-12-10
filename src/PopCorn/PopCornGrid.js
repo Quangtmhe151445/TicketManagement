@@ -1,10 +1,27 @@
+import { useState, useEffect } from "react";
 import { Row, Col, Card, Image, Button } from "react-bootstrap";
 
-export default function PopCornGrid({ items, startEdit, remove, money, toggleStatus }) {
+export default function PopCornGrid({ items, startEdit, remove, money }) {
+  const [localItems, setLocalItems] = useState(items);
+
+  useEffect(() => {
+    setLocalItems(items);
+  }, [items]);
+
+  const handleToggle = (id) => {
+    const updatedItems = localItems.map((item) => {
+      if (item.id === id) {
+        const newStatus = item.status === "active" ? "inactive" : "active";
+        return { ...item, status: newStatus };
+      }
+      return item;
+    });
+    setLocalItems(updatedItems); 
+  };
 
   return (
     <Row>
-      {items.map((item) => (
+      {localItems.map((item) => (
         <Col md={6} lg={4} key={item.id} className="mb-3">
           <Card className="h-100 shadow-sm">
             <div
@@ -32,8 +49,7 @@ export default function PopCornGrid({ items, startEdit, remove, money, toggleSta
               <div className="d-flex justify-content-between mt-2">
                 <strong>{money(item.price)}</strong>
 
-                {/* Click đổi trạng thái */}
-                <Button size="sm" onClick={() => toggleStatus(item.id)}>
+                <Button size="sm" onClick={() => handleToggle(item.id)}>
                   {item.status === "active" ? "Tạm ngưng" : "Bán lại"}
                 </Button>
               </div>

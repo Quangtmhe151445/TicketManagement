@@ -123,5 +123,64 @@
       "weekend": 300000,
       "holiday": 350000
     }
+  ],
+  "popcorns": [
+    {
+      "id": "p1",
+      "sku": "POP-L-001",
+      "name": "Bắp Bơ Lớn",
+      "category": "Popcorn",
+      "type": "popcorn",
+      "size": "L",
+      "price": 55000,
+      "stock": 12,
+      "threshold": 5,
+      "image": "https://i.imgur.com/8Km9tLL.png",
+      "description": "Bắp vị bơ thơm béo, phục vụ nóng.",
+      "status": "active"
+    },
+    {
+      "id": "p2",
+      "sku": "POP-M-002",
+      "name": "Bắp Caramel",
+      "category": "Popcorn",
+      "type": "popcorn",
+      "size": "M",
+      "price": 45000,
+      "stock": 20,
+      "threshold": 6,
+      "image": "https://i.imgur.com/KzmYdSx.png",
+      "description": "Bắp caramel ngọt nhẹ, giòn thơm.",
+      "status": "active"
+    },
+    {
+      "id": "d1",
+      "sku": "DRK-S-010",
+      "name": "Coca Cola Size S",
+      "category": "Drink",
+      "type": "drink",
+      "size": "S",
+      "price": 25000,
+      "stock": 30,
+      "threshold": 10,
+      "image": "https://i.imgur.com/7kCEGiJ.png",
+      "description": "Coca Cola lạnh, chai nhỏ tiện lợi.",
+      "status": "active"
+    },
+    {
+      "id": "c1",
+      "sku": "CMB-001",
+      "name": "Combo 1: Bắp + Pepsi",
+      "category": "Combo",
+      "type": "combo",
+      "size": "M",
+      "price": 75000,
+      "stock": 10,
+      "threshold": 3,
+      "image": "https://i.imgur.com/h5SsuqH.png",
+      "description": "1 bắp M + 1 Pepsi M.",
+      "status": "active"
+    }
   ]
+
 }
