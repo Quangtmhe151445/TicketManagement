@@ -1,0 +1,25 @@
+/* Mờ toàn bộ background */
+.blur-background {
+  filter: blur(5px);
+  pointer-events: none;
+  user-select: none;
+}
+
+/* Lớp phủ đằng sau login */
+.overlay-login {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.4);
+  z-index: 10;
+}
+
+/* Làm login nổi lên trên */
+.login-container {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 20;
+  width: 100%;
+  max-width: 400px;
+}
