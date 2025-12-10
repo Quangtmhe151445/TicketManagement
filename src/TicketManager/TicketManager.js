@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import {
   Container,
   Row,
@@ -9,90 +9,174 @@ import {
   InputGroup,
   Badge,
 } from "react-bootstrap";
+
+import db from "../database.json";
 import EditTicket from "./EditTicketPage";
 
-
-const mockTicketPrices = [
-  {
-    id: 101,
-    showtime: "10:00",
-    filmName: "Dune: Part Two",
-    room: "Room 01",
-    quantity: "All",
-    type: "2D",
-    price: "100,000 VND",
-    status: "Active",
-  },
-  {
-    id: 102,
-    showtime: "13:00",
-    filmName: "Oppenheimer",
-    room: "Room VIP",
-    quantity: "100",
-    type: "3D IMAX",
-    price: "180,000 VND",
-    status: "Active",
-  },
-  {
-    id: 103,
-    showtime: "15:00 ",
-    filmName: "Barbie",
-    room: "Room 05",
-    quantity: "1",
-    type: "2D",
-    price: "80,000 VND",
-    status: "Inactive",
-  },
-  {
-    id: 104,
-    showtime: "18:00 ",
-    filmName: "Avatar: The Way of Water",
-    room: "Room 03",
-    quantity: "100",
-    type: "3D",
-    price: "120,000 VND",
-    status: "Active",
-  },
-];
+const { movies, cinema_rooms, showtimes, price_rules } = db;
 
 const getStatusVariant = (status) => {
   switch (status) {
-    case "Active":
+    case "open":
       return "success";
-    case "Inactive":
+    case "sold_out":
+      return "warning";
+    case "canceled":
       return "danger";
     default:
       return "secondary";
   }
 };
 
+const formatCurrency = (amount) => {
+  return amount ? `${amount.toLocaleString("vi-VN")} VND` : "N/A";
+};
+
+const getBasePrice = (roomType, seatType) => {
+  const rule = price_rules.find(
+    (r) => r.room_type === roomType && r.seat_type === seatType
+  );
+
+  return rule ? rule.weekday : 0;
+};
+
+const normalizeShowtimes = () => {
+  const movieMap = new Map(movies.map((m) => [m.id, m]));
+  const roomMap = new Map(cinema_rooms.map((r) => [r.id, r]));
+
+  return showtimes.map((st, index) => {
+    const movie = movieMap.get(st.movie_id) || {};
+    const room = roomMap.get(st.room_id) || {};
+
+    const defaultSeatType =
+      Object.values(room.seat_types || {})[0] || "Standard";
+
+    const basePrice = getBasePrice(room.type, defaultSeatType);
+
+    const startTime = new Date(st.start_time);
+
+    return {
+      id: st.id,
+      showtime: startTime.toLocaleTimeString("vi-VN", {
+        hour: "2-digit",
+        minute: "2-digit",
+      }),
+      filmName: movie.title || "N/A",
+      room: room.name || "N/A",
+
+      quantity: st.status === "open" ? "Available" : "N/A",
+      type: room.type || "N/A",
+      price: formatCurrency(basePrice),
+
+      status: st.status,
+    };
+  });
+};
+
 function TicketManagement() {
+  const [ticketList, setTicketList] = useState([]);
+
+  const [filterType, setFilterType] = useState("All");
+  const [filterFilm, setFilterFilm] = useState("All");
+  const [filterStatus, setFilterStatus] = useState("All");
+  const [searchTerm, setSearchTerm] = useState("");
+
+  useEffect(() => {
+    const initialData = normalizeShowtimes();
+    setTicketList(initialData);
+  }, []);
+
+  const uniqueFilms = useMemo(
+    () => ["All", ...new Set(movies.map((m) => m.title))],
+    []
+  );
+  const uniqueTypes = useMemo(
+    () => ["All", ...new Set(cinema_rooms.map((r) => r.type))],
+    []
+  );
+  const uniqueStatuses = useMemo(
+    () => ["All", "open", "sold_out", "canceled"],
+    []
+  );
+
+  const filteredTicketList = useMemo(() => {
+    let filtered = ticketList;
+
+    if (filterType !== "All") {
+      filtered = filtered.filter((ticket) => ticket.type === filterType);
+    }
+
+    if (filterFilm !== "All") {
+      filtered = filtered.filter((ticket) => ticket.filmName === filterFilm);
+    }
+
+    if (filterStatus !== "All") {
+      const dbStatus = filterStatus;
+      filtered = filtered.filter((ticket) => ticket.status === dbStatus);
+    }
+
+    if (searchTerm) {
+      const lowerCaseSearch = searchTerm.toLowerCase();
+      filtered = filtered.filter(
+        (ticket) =>
+          ticket.showtime.toLowerCase().includes(lowerCaseSearch) ||
+          ticket.filmName.toLowerCase().includes(lowerCaseSearch)
+      );
+    }
+
+    return filtered;
+  }, [ticketList, filterType, filterFilm, filterStatus, searchTerm]);
+
   return (
     <Container fluid className="p-4">
-      <h2 className="text-center mb-4">Ticket Management</h2>
+      <h2 className="text-center mb-4">🎬 Ticket Management (Dữ liệu từ DB)</h2>
 
       <Row className="mb-4 align-items-end g-3">
         <Col md={2}>
-          <Form.Select aria-label="Filter type">
-            <option>Filter type</option>
-            <option value="1">2D</option>
-            <option value="2">3D</option>
+          <Form.Select
+            aria-label="Filter type"
+            value={filterType}
+            onChange={(e) => setFilterType(e.target.value)}
+          >
+            <option value="All">Filter Type</option>
+            {uniqueTypes
+              .filter((t) => t !== "All")
+              .map((type) => (
+                <option key={type} value={type}>
+                  {type}
+                </option>
+              ))}
           </Form.Select>
         </Col>
 
         <Col md={2}>
-          <Form.Select aria-label="Filter Film">
-            <option>Filter Film</option>
-            <option value="1">Dune: Part Two</option>
-            <option value="2">Oppenheimer</option>
+          <Form.Select
+            aria-label="Filter Film"
+            value={filterFilm}
+            onChange={(e) => setFilterFilm(e.target.value)}
+          >
+            <option value="All">Filter Film</option>
+            {uniqueFilms
+              .filter((f) => f !== "All")
+              .map((film) => (
+                <option key={film} value={film}>
+                  {film}
+                </option>
+              ))}
           </Form.Select>
         </Col>
 
         <Col md={2}>
-          <Form.Select aria-label="Status">
-            <option>Status</option>
-            <option value="1">Active</option>
-            <option value="2">Inactive</option>
+          <Form.Select
+            aria-label="Status"
+            value={filterStatus}
+            onChange={(e) => setFilterStatus(e.target.value)}
+          >
+            <option value="All">Status</option>
+
+            <option value="open">Open (Active)</option>
+            <option value="sold_out">Sold Out</option>
+            <option value="canceled">Canceled (Inactive)</option>
           </Form.Select>
         </Col>
 
@@ -102,8 +186,10 @@ function TicketManagement() {
               type="search"
               placeholder="Search by Showtime or Film Name..."
               aria-label="Search"
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
             />
-            <Button variant="info">
+            <Button variant="info" onClick={() => {}}>
               <i className="bi bi-search me-1"></i> Search
             </Button>
           </InputGroup>
@@ -114,7 +200,9 @@ function TicketManagement() {
 
       <Row className="mb-3 align-items-center">
         <Col>
-          <h4 className="mb-0">Current Price Table </h4>
+          <h4 className="mb-0">
+            Current Showtime Table ({filteredTicketList.length} results)
+          </h4>
         </Col>
       </Row>
 
@@ -131,31 +219,30 @@ function TicketManagement() {
                   <th>Showtime</th>
                   <th>Film</th>
                   <th>Room</th>
-                  <th>Quantity</th>
+                  <th>Capacity/Status</th>
                   <th>Type</th>
-                  <th>Price</th>
-
+                  <th>Base Price</th>
                   <th>Status</th>
                   <th>Action</th>
                 </tr>
               </thead>
               <tbody>
-                {mockTicketPrices.map((price, index) => (
-                  <tr key={price.id}>
-                    <td>{price.id}</td>
-                    <td>{price.showtime}</td>
-                    <td>{price.filmName}</td>
-                    <td>{price.room}</td>
-                    <td>{price.quantity}</td>
-                    <td>{price.type}</td>
+                {filteredTicketList.map((ticket) => (
+                  <tr key={ticket.id}>
+                    <td>{ticket.id}</td>
+                    <td>{ticket.showtime}</td>
+                    <td>{ticket.filmName}</td>
+                    <td>{ticket.room}</td>
+                    <td>{ticket.quantity}</td>
+                    <td>{ticket.type}</td>
                     <td>
                       <span className="fw-bold text-primary">
-                        {price.price}
+                        {ticket.price}
                       </span>
                     </td>
                     <td>
-                      <Badge bg={getStatusVariant(price.status)}>
-                        {price.status}
+                      <Badge bg={getStatusVariant(ticket.status)}>
+                        {ticket.status.toUpperCase()}
                       </Badge>
                     </td>
 
@@ -171,7 +258,8 @@ function TicketManagement() {
                     </td>
                   </tr>
                 ))}
-                {[...Array(Math.max(0, 5 - mockTicketPrices.length))].map(
+
+                {[...Array(Math.max(0, 5 - filteredTicketList.length))].map(
                   (_, rowIndex) => (
                     <tr
                       key={`empty-row-${rowIndex}`}
@@ -187,8 +275,7 @@ function TicketManagement() {
           </div>
         </Col>
 
-        <EditTicket/>
-
+        <EditTicket />
       </Row>
     </Container>
   );
