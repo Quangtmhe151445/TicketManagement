@@ -28,6 +28,7 @@
       "name": "Room 01",
       "type": "2D Standard",
       "status": "active",
+      "total_seats": 150,
       "seat_types": {
         "A": "Standard",
         "B": "Standard",
@@ -39,6 +40,7 @@
       "name": "Room VIP",
       "type": "3D IMAX",
       "status": "active",
+      "total_seats": 100,
       "seat_types": {
         "A": "VIP",
         "B": "VIP",
@@ -50,6 +52,7 @@
       "name": "Room 05",
       "type": "2D Standard",
       "status": "maintenance",
+      "total_seats": 120,
       "seat_types": {
         "A": "Standard",
         "B": "VIP"
@@ -60,10 +63,11 @@
     {
       "id": "st001",
       "movie_id": "mv001",
-      "room_id": "room01",
+      "room_id": "room03",
       "start_time": "2025-12-15T10:00:00",
       "end_time": "2025-12-15T12:46:00",
-      "status": "open"
+      "status": "open",
+      "tickets_sold": 25
     },
     {
       "id": "st002",
@@ -71,7 +75,8 @@
       "room_id": "room02",
       "start_time": "2025-12-15T13:00:00",
       "end_time": "2025-12-15T16:00:00",
-      "status": "open"
+      "status": "open",
+      "tickets_sold": 90
     },
     {
       "id": "st003",
@@ -79,7 +84,8 @@
       "room_id": "room01",
       "start_time": "2025-12-15T15:00:00",
       "end_time": "2025-12-15T17:46:00",
-      "status": "open"
+      "status": "open",
+      "tickets_sold": 15
     },
     {
       "id": "st004",
@@ -87,7 +93,8 @@
       "room_id": "room02",
       "start_time": "2025-12-15T18:00:00",
       "end_time": "2025-12-15T21:00:00",
-      "status": "sold_out"
+      "status": "sold_out",
+      "tickets_sold": 100
     }
   ],
   "price_rules": [
@@ -182,5 +189,4 @@
       "status": "active"
     }
   ]
-
 }
