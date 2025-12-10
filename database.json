@@ -126,29 +126,67 @@
   ],
   "staff": [
     {
-      "id": "sf001",
-      "name": "Nguyen Thanh Lam",
+      "id": "1",
+      "name": "Admin",
       "role": "admin",
       "username": "admin_lam",
-      "password": "hashed_password",
-      "shift": []
+      "password": "admin123"
     },
     {
       "id": "sf002",
-      "name": "Tran Thi Hoa",
+      "name": "Thi Hoa",
       "role": "ticket_staff",
       "username": "hoa_ticket",
-      "password": "hashed_password",
-      "shift": ["2025-12-08T08:00:00", "2025-12-08T16:00:00"]
+      "password": "hashed_password"
     },
     {
       "id": "sf003",
-      "name": "Le Phuoc An",
+      "name": "Phuoc An",
       "role": "checkin_staff",
       "username": "an_checkin",
-      "password": "hashed_password",
-      "shift": ["2025-12-08T12:00:00", "2025-12-08T20:00:00"]
-
+      "password": "hashed_password"
+    }
+  ],
+  "work schedule": [
+    {
+      "id": "1765182128544",
+      "title": "Thi Hoa",
+      "day": "Monday",
+      "time": "08:00",
+      "endTime": "09:00",
+      "week": "2025-12-08"
+    },
+    {
+      "id": "1765182187868",
+      "title": "Thi Hoa",
+      "day": "Friday",
+      "time": "08:00",
+      "endTime": "09:00",
+      "week": "2025-12-08"
+    },
+    {
+      "id": "1765183899115",
+      "title": "Phuoc An",
+      "day": "Wednesday",
+      "time": "08:00",
+      "endTime": "09:00",
+      "week": "2025-12-08"
+    },
+    {
+      "id": "1765203166016",
+      "title": "Phuoc An",
+      "day": "Monday",
+      "time": "13:00",
+      "endTime": "14:00",
+      "week": "2025-12-08"
+    },
+    {
+      "id": "1765203293402",
+      "title": "Thi Hoa",
+      "day": "Thursday",
+      "time": "08:00",
+      "endTime": "09:00",
+      "week": "2025-12-08"
     }
   ]
 }
