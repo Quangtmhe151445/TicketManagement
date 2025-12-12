@@ -1,12 +1,12 @@
 import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
-import Timetable from "./timeTable/PersonnelManagement";
+import Timetable from "./TimeTable/PersonnelManagement";
 import MyNav from "./navbar.js";
 import MyFooter from "./footer.js";
 import Ticket from "./TicketManager/TicketManager.js";
 import PopCornManager from "./PopCorn/PopCornManager.js";
 import CinemaRoomManager from "./CinemaRoom/CinemaRoomManager.js";
 
-import Login from "./timeTable/components/LoginForm.js";
+import Login from "./TimeTable/components/LoginForm.js";
 import EditTicketPage from "./TicketManager/EditTicketPage.js";
 import MovieList from "./movie_management/list-movie.js";
 

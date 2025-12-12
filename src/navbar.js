@@ -5,18 +5,22 @@ import Form from "react-bootstrap/Form";
 import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
 import NavDropdown from "react-bootstrap/NavDropdown";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 function MyNav() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const navigate = useNavigate();
 
   const handleAuthClick = () => {
-    setIsLoggedIn(!isLoggedIn);
-    if (isLoggedIn) {
-      alert("Logged out successfully!");
+    if (!isLoggedIn) {
+      navigate("/timetable");
     } else {
+      navigate("/");
+
       alert("Logged in successfully!");
     }
+
+    setIsLoggedIn(!isLoggedIn);
   };
 
   return (
@@ -30,9 +34,9 @@ function MyNav() {
 
         <Navbar.Collapse id="navbarScroll">
           <Nav className="me-auto my-2 my-lg-0" navbarScroll>
-            <Nav.Link as={Link} to="/">
+            {/* <Nav.Link as={Link} to="/">
               <i className="bi bi-house-door-fill me-1"></i> Home
-            </Nav.Link>
+            </Nav.Link> */}
 
             {/* Nếu bạn vẫn muốn giữ movie-list của HEAD thì bật dòng dưới */}
             {/* <Nav.Link as={Link} to="/movie-list">Movies</Nav.Link> */}

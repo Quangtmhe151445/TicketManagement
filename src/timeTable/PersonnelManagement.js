@@ -88,9 +88,6 @@ function App() {
     <Container className="py-4" fluid>
       <div className="d-flex justify-content-between align-items-center mb-3">
         <h2 className="text-primary">📅 Weekly work schedule ({staff.name})</h2>
-        <Button variant="outline-danger" onClick={() => setstaff(null)}>
-          Logout
-        </Button>
       </div>
 
       <Row className="g-4">

@@ -27,6 +27,7 @@ const Login = ({ onLogin }) => {
             username: user.username,
             role: user.role,
           });
+          alert("Logged in successfully!");
         } else {
           alert("Invalid username or password");
         }
