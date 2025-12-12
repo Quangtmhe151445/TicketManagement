@@ -1,7 +1,5 @@
-import { useState, useMemo } from "react";
 import { Container, Row, Col } from "react-bootstrap";
-
-import { SAMPLE } from "./sampleData";
+import { useState, useMemo, useEffect } from "react";
 import PopCornForm from "./PopCornForm";
 import PopCornFilters from "./PopCornFilters";
 import PopCornGrid from "./PopCornGrid";
@@ -10,7 +8,14 @@ const money = (n) => Number(n || 0).toLocaleString() + "₫";
 const genId = () => "x" + Date.now().toString(36).slice(-6);
 
 export default function PopCornManager() {
-  const [items, setItems] = useState(SAMPLE);
+  const [items, setItems] = useState([]);
+
+  useEffect(() => {
+    fetch("http://localhost:9999/popcorns")
+      .then(res => res.json())
+      .then(data => setItems(data))
+      .catch(err => console.error(err));
+  }, []);
 
   const emptyForm = {
     id: null,
@@ -29,18 +34,25 @@ export default function PopCornManager() {
 
   const [form, setForm] = useState(emptyForm);
 
-  const setF = (key, value) => setForm((f) => ({ ...f, [key]: value }));
+  const setF = (key, value) =>
+    setForm(f => ({ ...f, [key]: value }));
+
   const resetForm = () => setForm(emptyForm);
 
   const save = () => {
-    if (!form.sku || !form.name) return alert("Thiếu SKU / Tên");
+    if (!form.sku || !form.name)
+      return alert("Thiếu SKU / Tên");
 
-    const payload = { ...form, price: +form.price, stock: +form.stock };
-    if (!payload.id) payload.id = genId();
+    const payload = {
+      ...form,
+      price: +form.price,
+      stock: +form.stock,
+      id: form.id || genId(),
+    };
 
-    setItems((prev) =>
-      prev.some((i) => i.id === payload.id)
-        ? prev.map((i) => (i.id === payload.id ? payload : i))
+    setItems(prev =>
+      prev.some(i => i.id === payload.id)
+        ? prev.map(i => i.id === payload.id ? payload : i)
         : [payload, ...prev]
     );
 
@@ -48,21 +60,19 @@ export default function PopCornManager() {
   };
 
   const remove = (id) => {
-    if (window.confirm("Xóa?"))
-      setItems((prev) => prev.filter((i) => i.id !== id));
+    if (window.confirm("Xóa?")) {
+      setItems(prev => prev.filter(i => i.id !== id));
+    }
   };
 
-  const startEdit = (item) => setForm({ ...item });
+  const startEdit = (item) => setForm(item);
 
   const toggleStatus = (id) => {
-    setItems((prev) =>
-      prev.map((item) =>
-        item.id === id
-          ? {
-              ...item,
-              status: item.status === "active" ? "inactive" : "active",
-            }
-          : item
+    setItems(prev =>
+      prev.map(i =>
+        i.id === id
+          ? { ...i, status: i.status === "active" ? "inactive" : "active" }
+          : i
       )
     );
   };
@@ -71,12 +81,12 @@ export default function PopCornManager() {
   const [filterCategory, setFilterCategory] = useState("");
 
   const categories = useMemo(
-    () => Array.from(new Set(items.map((i) => i.category))),
+    () => [...new Set(items.map(i => i.category))],
     [items]
   );
 
   const filtered = items.filter(
-    (i) =>
+    i =>
       (q === "" ||
         `${i.name} ${i.sku}`.toLowerCase().includes(q.toLowerCase())) &&
       (!filterCategory || i.category === filterCategory)
@@ -92,6 +102,7 @@ export default function PopCornManager() {
             resetForm={resetForm}
             save={save}
           />
+
           <PopCornFilters
             q={q}
             setQ={setQ}
