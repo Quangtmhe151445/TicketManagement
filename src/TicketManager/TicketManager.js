@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo, useCallback } from "react";
 import {
   Container,
   Row,
@@ -13,7 +13,10 @@ import {
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
-// --- HÀM TIỆN ÍCH (Utility Functions) ---
+const formatCurrency = (amount) => {
+  return amount ? `${amount.toLocaleString("vi-VN")} VND` : "N/A";
+};
+
 const getStatusVariant = (status) => {
   switch (status) {
     case "open":
@@ -27,18 +30,26 @@ const getStatusVariant = (status) => {
   }
 };
 
-const formatCurrency = (amount) => {
-  return amount ? `${amount.toLocaleString("vi-VN")} VND` : "N/A";
+const getRoomCategory = (roomId) => {
+  const vipRoomIds = ["room02", "room07", "room08"];
+  return vipRoomIds.includes(roomId) ? "VIP" : "Phòng Thường";
 };
 
-const getBasePrice = (priceRules, roomType, seatType) => {
-  const rule = priceRules.find(
-    (r) => r.room_type === roomType && r.seat_type === seatType
-  );
-  return rule ? rule.weekday : 0;
+const getCalculatedBasePrice = (roomCategory, roomType) => {
+  const safeRoomType = roomType || "";
+  const is3D = safeRoomType.includes("3D");
+
+  if (roomCategory === "VIP") {
+    // Giá VIP: 999,999 (3D) hoặc 500,000 (2D)
+    return is3D ? 999999 : 500000;
+  }
+  // Giá Thường: 190,000 (3D) hoặc 110,000 (2D)
+  return is3D ? 190000 : 110000;
 };
 
-// Hàm chuẩn hóa dữ liệu
+/**
+ * Chuẩn hóa và thêm các trường hiển thị vào dữ liệu suất chiếu
+ */
 const normalizeShowtimes = (rawData) => {
   if (!rawData || !rawData.movies || !rawData.rooms || !rawData.showtimes) {
     return [];
@@ -51,20 +62,22 @@ const normalizeShowtimes = (rawData) => {
     const movie = movieMap.get(st.movie_id) || {};
     const room = roomMap.get(st.room_id) || {};
 
-    const defaultSeatType = Object.keys(room.seat_types || {})[0] || "Standard";
-
-    const basePrice = getBasePrice(rawData.rules, room.type, defaultSeatType);
+    const roomCategory = getRoomCategory(st.room_id);
+    const roomType = room.type || "2D Standard";
+    const basePrice = getCalculatedBasePrice(roomCategory, roomType);
 
     const startTime = new Date(st.start_time);
 
     const totalSeats = room.total_seats || 0;
     const ticketsSold = st.tickets_sold || 0;
-    const seatsRemaining = totalSeats - ticketsSold;
+    const safeSeatsRemaining = Math.max(0, totalSeats - ticketsSold);
 
-    let capacityDisplay = `${seatsRemaining} / ${totalSeats}`;
+    let capacityDisplay = `${safeSeatsRemaining} / ${totalSeats}`;
 
-    if (st.status === "canceled" || st.status === "sold_out") {
-      capacityDisplay = st.status.toUpperCase();
+    if (st.status === "canceled") {
+      capacityDisplay = "CANCELED";
+    } else if (st.status === "sold_out") {
+      capacityDisplay = "SOLD OUT";
     }
 
     return {
@@ -77,17 +90,21 @@ const normalizeShowtimes = (rawData) => {
       room: room.name || "N/A",
       quantity: capacityDisplay,
       type: room.type || "N/A",
-      priceValue: basePrice,
-      price: formatCurrency(basePrice),
+      priceValue: basePrice, // Giá trị số để sắp xếp
+      price: formatCurrency(basePrice), // Giá trị đã format để hiển thị
       status: st.status,
     };
   });
 };
 
+// ===================================
+// 🎬 COMPONENT CHÍNH
+// ===================================
+
 export default function TicketManagement() {
   const navigate = useNavigate();
 
-  // --- 1. STATE DỮ LIỆU GỐC VÀ TẢI ---
+  // --- STATE DỮ LIỆU GỐC VÀ TẢI ---
   const [loading, setLoading] = useState(true);
   const [initialData, setInitialData] = useState([]);
   const [rawData, setRawData] = useState({
@@ -97,25 +114,25 @@ export default function TicketManagement() {
     showtimes: [],
   });
 
-  // --- 2. STATE CHO LỌC ---
+  // --- STATE CHO LỌC ---
   const [filterType, setFilterType] = useState("All");
   const [filterFilm, setFilterFilm] = useState("All");
   const [filterStatus, setFilterStatus] = useState("All");
   const [searchTerm, setSearchTerm] = useState("");
 
-  // --- 3. STATE CHO SẮP XẾP (Theo format Index) ---
+  // --- STATE CHO SẮP XẾP ---
   const [sortField, setSortField] = useState("showtime");
   const [isAsc, setIsAsc] = useState(true);
   const [isSorted, setIsSorted] = useState(true);
 
-  // --- 4. DATA FETCHING (useEffect) ---
+  // --- DATA FETCHING (useEffect) ---
   useEffect(() => {
     setLoading(true);
     const endpoints = [
       "http://localhost:9999/movies",
       "http://localhost:9999/cinema_rooms",
       "http://localhost:9999/showtimes",
-      "http://localhost:9999/price_rules",
+      "http://localhost:9999/price_rules", // Giá trị này có thể không cần thiết nếu logic giá nằm cố định trong code
     ];
 
     axios
@@ -136,66 +153,99 @@ export default function TicketManagement() {
       .finally(() => setLoading(false));
   }, []);
 
-  // --- 5. LOGIC LỌC (Tương tự filteredList trong Index) ---
-  const filteredList = initialData.filter((ticket) => {
-    const matchType = filterType === "All" || ticket.type === filterType;
-    const matchFilm = filterFilm === "All" || ticket.filmName === filterFilm;
-    const matchStatus =
-      filterStatus === "All" || ticket.status === filterStatus;
+  // --- UNIQUE OPTIONS CHO BỘ LỌC (useMemo) ---
+  const { uniqueFilms, uniqueTypes } = useMemo(() => {
+    const films = ["All", ...new Set(rawData.movies.map((m) => m.title))];
+    const types = ["All", ...new Set(rawData.rooms.map((r) => r.type))];
+    return { uniqueFilms: films, uniqueTypes: types };
+  }, [rawData.movies, rawData.rooms]);
 
-    const lowerCaseSearch = searchTerm.toLowerCase();
-    const matchSearch =
-      searchTerm === "" ||
-      ticket.showtime.toLowerCase().includes(lowerCaseSearch) ||
-      ticket.filmName.toLowerCase().includes(lowerCaseSearch);
+  // --- LOGIC LỌC (useMemo) ---
+  const filteredList = useMemo(() => {
+    return initialData.filter((ticket) => {
+      const matchType = filterType === "All" || ticket.type === filterType;
+      const matchFilm = filterFilm === "All" || ticket.filmName === filterFilm;
+      const matchStatus =
+        filterStatus === "All" || ticket.status === filterStatus;
 
-    return matchType && matchFilm && matchStatus && matchSearch;
-  });
+      const lowerCaseSearch = searchTerm.toLowerCase();
+      const matchSearch =
+        searchTerm === "" ||
+        ticket.showtime.toLowerCase().includes(lowerCaseSearch) ||
+        ticket.filmName.toLowerCase().includes(lowerCaseSearch);
 
-  // --- 6. LOGIC SẮP XẾP (Tương tự finalList trong Index) ---
-  const finalList = isSorted
-    ? [...filteredList].sort((a, b) => {
-        let result = 0;
+      return matchType && matchFilm && matchStatus && matchSearch;
+    });
+  }, [initialData, filterType, filterFilm, filterStatus, searchTerm]);
 
-        if (sortField === "filmName" || sortField === "showtime") {
-          result = a[sortField].localeCompare(b[sortField], "vi");
-        } else if (sortField === "id") {
-          result = a.id - b.id;
-        } else if (sortField === "priceValue") {
-          result = a.priceValue - b.priceValue;
-        }
+  // --- LOGIC SẮP XẾP (useMemo) ---
+  const finalList = useMemo(() => {
+    if (!isSorted) {
+      return filteredList;
+    }
 
-        return isAsc ? result : -result;
-      })
-    : filteredList;
+    return [...filteredList].sort((a, b) => {
+      let result = 0;
 
-  // --- 7. XỬ LÝ SỰ KIỆN ---
+      if (sortField === "filmName" || sortField === "showtime") {
+        result = a[sortField].localeCompare(b[sortField], "vi");
+      } else if (sortField === "id") {
+        // Xử lý so sánh ID có tiền tố (ví dụ: "st001")
+        const idA = parseInt(a.id.slice(2));
+        const idB = parseInt(b.id.slice(2));
+        result = idA - idB;
+      } else if (sortField === "priceValue") {
+        result = a.priceValue - b.priceValue;
+      } else if (sortField === "status") {
+        // Sắp xếp theo trạng thái (có thể thêm logic cụ thể hơn nếu cần)
+        result = a.status.localeCompare(b.status);
+      }
+
+      return isAsc ? result : -result;
+    });
+  }, [filteredList, isSorted, sortField, isAsc]);
+
+  // --- XỬ LÝ SỰ KIỆN (useCallback) ---
   const handleSort = (field) => {
     setIsSorted(true);
+    // Đảo ngược thứ tự nếu nhấp vào trường đang được sắp xếp, nếu không thì mặc định là tăng dần (true)
     setIsAsc((prev) => (sortField === field ? !prev : true));
     setSortField(field);
   };
 
-  const handleEditClick = (ticketId) => {
-    navigate(`/edit/${ticketId}`);
+  const handleEditClick = useCallback(
+    (ticketId) => {
+      navigate(`/edit/${ticketId}`);
+    },
+    [navigate]
+  );
+
+  // --- HÀM RENDER TIỆN ÍCH ---
+  const sortIndicator = (field) => {
+    if (sortField === field) {
+      return isAsc ? " ▲" : " ▼";
+    }
+    return null;
   };
 
-  // --- 8. RENDER (JSX) ---
-  const uniqueFilms = ["All", ...new Set(rawData.movies.map((m) => m.title))];
-  const uniqueTypes = ["All", ...new Set(rawData.rooms.map((r) => r.type))];
+  // Xác định các cột KHÔNG thể sắp xếp
+  const unSortableKeys = ["quantity", "room", "type", "status", "action"];
 
+  // --- RENDER (JSX) ---
   return (
     <Container fluid className="p-4">
-      <h2 className="text-center mb-4">🎬 Ticket Management</h2>
+      <h2 className="text-center mb-4">🎬 Ticket Management (Showtimes)</h2>
 
       {/* --- Bộ lọc và Tìm kiếm --- */}
       <Row className="mb-4 align-items-end g-3">
+        {/* Filter Type */}
         <Col md={2}>
+          <Form.Label className="fw-bold text-secondary mb-0">Type</Form.Label>
           <Form.Select
             value={filterType}
             onChange={(e) => setFilterType(e.target.value)}
           >
-            <option value="All">Filter Type</option>
+            <option value="All">All Types</option>
             {uniqueTypes
               .filter((t) => t !== "All")
               .map((type) => (
@@ -206,12 +256,14 @@ export default function TicketManagement() {
           </Form.Select>
         </Col>
 
-        <Col md={2}>
+        {/* Filter Film */}
+        <Col md={3}>
+          <Form.Label className="fw-bold text-secondary mb-0">Film</Form.Label>
           <Form.Select
             value={filterFilm}
             onChange={(e) => setFilterFilm(e.target.value)}
           >
-            <option value="All">Filter Film</option>
+            <option value="All">All Films</option>
             {uniqueFilms
               .filter((f) => f !== "All")
               .map((film) => (
@@ -222,19 +274,27 @@ export default function TicketManagement() {
           </Form.Select>
         </Col>
 
+        {/* Filter Status */}
         <Col md={2}>
+          <Form.Label className="fw-bold text-secondary mb-0">
+            Status
+          </Form.Label>
           <Form.Select
             value={filterStatus}
             onChange={(e) => setFilterStatus(e.target.value)}
           >
-            <option value="All">Status</option>
+            <option value="All">All Statuses</option>
             <option value="open">Open (Active)</option>
             <option value="sold_out">Sold Out</option>
-            <option value="canceled">Canceled (Inactive)</option>
+            <option value="canceled">Canceled</option>
           </Form.Select>
         </Col>
 
-        <Col md={6}>
+        {/* Search Term */}
+        <Col md={5}>
+          <Form.Label className="fw-bold text-secondary mb-0">
+            Search
+          </Form.Label>
           <InputGroup>
             <Form.Control
               type="search"
@@ -242,7 +302,7 @@ export default function TicketManagement() {
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
             />
-            <Button variant="info">
+            <Button variant="info" disabled>
               <i className="bi bi-search me-1"></i> Search
             </Button>
           </InputGroup>
@@ -254,8 +314,8 @@ export default function TicketManagement() {
       {/* --- Bảng Hiển thị --- */}
       <Row className="mb-3 align-items-center">
         <Col>
-          <h4 className="mb-0">
-            Current Showtime Table ({finalList.length} results)
+          <h4 className="mb-0 text-primary">
+            Current Showtimes ({finalList.length} results)
           </h4>
         </Col>
       </Row>
@@ -269,57 +329,54 @@ export default function TicketManagement() {
             </div>
           ) : (
             <div
-              className="table-responsive"
-              style={{ border: "1px solid #dee2e6" }}
+              className="table-responsive shadow-sm"
+              style={{
+                border: "1px solid #dee2e6",
+                borderRadius: "8px",
+                overflow: "hidden",
+              }}
             >
               <Table bordered hover className="mb-0 align-middle">
                 <thead>
-                  <tr className="table-light">
-                    <th
-                      onClick={() => handleSort("id")}
-                      style={{ cursor: "pointer" }}
-                    >
-                      ID {sortField === "id" && (isAsc ? " ▲" : " ▼")}
-                    </th>
-                    <th
-                      onClick={() => handleSort("showtime")}
-                      style={{ cursor: "pointer" }}
-                    >
-                      Showtime{" "}
-                      {sortField === "showtime" && (isAsc ? " ▲" : " ▼")}
-                    </th>
-                    <th
-                      onClick={() => handleSort("filmName")}
-                      style={{ cursor: "pointer" }}
-                    >
-                      Film {sortField === "filmName" && (isAsc ? " ▲" : " ▼")}
-                    </th>
-                    <th>Room</th>
-                    <th>Seats Left / Total</th>
-                    <th>Type</th>
-                    <th
-                      onClick={() => handleSort("priceValue")}
-                      style={{ cursor: "pointer" }}
-                    >
-                      Base Price{" "}
-                      {sortField === "priceValue" && (isAsc ? " ▲" : " ▼")}
-                    </th>
-                    <th>Status</th>
-                    <th>Action</th>
+                  <tr className="table-dark">
+                    {[
+                      { key: "id", label: "ID" },
+                      { key: "showtime", label: "Showtime" },
+                      { key: "filmName", label: "Film" },
+                      { key: "room", label: "Room" },
+                      { key: "quantity", label: "Seats Left / Total" },
+                      { key: "type", label: "Type" },
+                      { key: "priceValue", label: "Base Price" },
+                      { key: "status", label: "Status" },
+                      { key: "action", label: "Action" },
+                    ].map((col) => {
+                      const isSortable = !unSortableKeys.includes(col.key);
+                      return (
+                        <th
+                          key={col.key}
+                          onClick={() => isSortable && handleSort(col.key)}
+                          style={{
+                            cursor: isSortable ? "pointer" : "default",
+                          }}
+                        >
+                          {col.label}
+                          {sortIndicator(col.key)}
+                        </th>
+                      );
+                    })}
                   </tr>
                 </thead>
+
                 <tbody>
                   {finalList.length > 0 ? (
                     finalList.map((ticket) => (
                       <tr key={ticket.id}>
-                        <td>{ticket.id}</td>
-                        <td>{ticket.showtime}</td>
+                        <td className="text-muted small">{ticket.id}</td>
+                        <td className="fw-bold">{ticket.showtime}</td>
                         <td>{ticket.filmName}</td>
                         <td>{ticket.room}</td>
-                        <td>
-                          <span className="fw-bold text-secondary">
-                            {ticket.quantity}
-                          </span>
+                        <td className="fw-bold text-secondary">
+                          {ticket.quantity}
                         </td>
                         <td>{ticket.type}</td>
                         <td>
@@ -329,14 +386,14 @@ export default function TicketManagement() {
                         </td>
                         <td>
                           <Badge bg={getStatusVariant(ticket.status)}>
-                            {ticket.status.toUpperCase()}
+                            {ticket.status.toUpperCase().replace("_", " ")}
                           </Badge>
                         </td>
-                        <td className="d-flex justify-content-center align-items-center p-1">
+                        <td className="text-center p-1">
                           <Button
                             variant="warning"
                             size="sm"
-                            title="Edit Price"
+                            title="Edit Showtime"
                             style={{ minWidth: "60px" }}
                             onClick={() => handleEditClick(ticket.id)}
                           >
@@ -352,21 +409,14 @@ export default function TicketManagement() {
                       </td>
                     </tr>
                   )}
+                  {/* Dòng trống để giữ chiều cao bảng */}
                   {[...Array(Math.max(0, 5 - finalList.length))].map(
                     (_, rowIndex) => (
                       <tr
                         key={`empty-row-${rowIndex}`}
                         style={{ height: "50px" }}
                       >
-                        <td />
-                        <td />
-                        <td />
-                        <td />
-                        <td />
-                        <td />
-                        <td />
-                        <td />
-                        <td />
+                        <td colSpan="9"></td>
                       </tr>
                     )
                   )}
