@@ -15,16 +15,8 @@ function App() {
     <Router>
       <MyNav />
 
-      <div>
-        <Link to="/timetable">Go to TimeTable</Link>
-        <Link to="/cinema-rooms" className="ms-2 fw-bold text-success">
-          Quản lý Phòng Chiếu
-        </Link>
-      </div>
-
       <Routes>
         <Route path="/login" element={<Login />} />
-        <Route path="/" element={<div>Chào mừng đến trang chủ!</div>} />
 
         <Route path="/movie-list" element={<MovieList />} />
 

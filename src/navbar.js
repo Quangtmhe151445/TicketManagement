@@ -53,25 +53,9 @@ function MyNav() {
                   Management
                 </Nav.Link>
 
-                <NavDropdown
-                  title="Settings & Pricing"
-                  id="navbarScrollingDropdown"
-                >
-                  <NavDropdown.Item as={Link} to="/prices">
-                    <i className="bi bi-currency-dollar me-1"></i> Price Rules
-                  </NavDropdown.Item>
-
-                  <NavDropdown.Item as={Link} to="/users">
-                    <i className="bi bi-people-fill me-1"></i> User Management
-                  </NavDropdown.Item>
-
-                  <NavDropdown.Divider />
-
-                  <NavDropdown.Item as={Link} to="/config">
-                    <i className="bi bi-gear-fill me-1"></i> System
-                    Configuration
-                  </NavDropdown.Item>
-                </NavDropdown>
+                <Nav.Link as={Link} to="/timetable">
+                  <i className="bi bi-door-open-fill me-1"></i> TimeTable
+                </Nav.Link>
               </>
             )}
           </Nav>
