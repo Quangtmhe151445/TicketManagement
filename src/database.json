@@ -1,0 +1,318 @@
+{
+  "movies": [
+    {
+      "id": "mv001",
+      "title": "Dune: Part Two",
+      "duration": 166,
+      "rating": "C13",
+      "status": "now_showing"
+    },
+    {
+      "id": "mv002",
+      "title": "Oppenheimer",
+      "duration": 180,
+      "rating": "C16",
+      "status": "now_showing"
+    },
+    {
+      "id": "mv003",
+      "title": "Inside Out 2",
+      "duration": 110,
+      "rating": "P",
+      "status": "coming_soon"
+    }
+  ],
+  "cinema_rooms": [
+    {
+      "id": "room01",
+      "name": "Room 01",
+      "type": "2D Standard",
+      "status": "active",
+      "total_seats": 150,
+      "seat_types": {
+        "A": "Standard",
+        "B": "Standard",
+        "C": "VIP"
+      }
+    },
+    {
+      "id": "room02",
+      "name": "Room VIP",
+      "type": "3D IMAX",
+      "status": "active",
+      "total_seats": 100,
+      "seat_types": {
+        "A": "VIP",
+        "B": "VIP",
+        "C": "Couple"
+      }
+    },
+    {
+      "id": "room03",
+      "name": "Room 05",
+      "type": "2D Standard",
+      "status": "maintenance",
+      "total_seats": 120,
+      "seat_types": {
+        "A": "Standard",
+        "B": "VIP"
+      }
+    },
+    {
+      "id": "room04",
+      "name": "Room 03",
+      "type": "2D Standard",
+      "status": "active",
+      "total_seats": 150,
+      "seat_types": {
+        "A": "Standard",
+        "B": "Standard"
+      }
+    },
+    {
+      "id": "room05",
+      "name": "Room 04",
+      "type": "2D Standard",
+      "status": "active",
+      "total_seats": 150,
+      "seat_types": {
+        "A": "Standard",
+        "B": "Standard"
+      }
+    },
+    {
+      "id": "room06",
+      "name": "Room 06",
+      "type": "3D IMAX",
+      "status": "active",
+      "total_seats": 120,
+      "seat_types": {
+        "A": "Standard",
+        "B": "Standard"
+      }
+    },
+    {
+      "id": "room07",
+      "name": "Room VIP Plus",
+      "type": "2D Standard",
+      "status": "active",
+      "total_seats": 80,
+      "seat_types": {
+        "A": "VIP",
+        "B": "Couple"
+      }
+    },
+    {
+      "id": "room08",
+      "name": "Room VIP Max",
+      "type": "3D IMAX",
+      "status": "active",
+      "total_seats": 90,
+      "seat_types": {
+        "A": "VIP",
+        "B": "Couple"
+      }
+    }
+  ],
+  "showtimes": [
+    {
+      "id": "st001",
+      "movie_id": "mv002",
+      "room_id": "room02",
+      "start_time": "2025-12-15T10:00:00",
+      "end_time": "2025-12-15T12:46:00",
+      "status": "open",
+      "tickets_sold": 25
+    },
+    {
+      "id": "st002",
+      "movie_id": "mv002",
+      "room_id": "room07",
+      "start_time": "2025-12-15T13:00:00",
+      "end_time": "2025-12-15T16:00:00",
+      "status": "open",
+      "tickets_sold": 90
+    },
+    {
+      "id": "st003",
+      "movie_id": "mv001",
+      "room_id": "room01",
+      "start_time": "2025-12-15T15:00:00",
+      "end_time": "2025-12-15T17:46:00",
+      "status": "open",
+      "tickets_sold": 15
+    },
+    {
+      "id": "st004",
+      "movie_id": "mv002",
+      "room_id": "room03",
+      "start_time": "2025-12-15T18:00:00",
+      "end_time": "2025-12-15T21:00:00",
+      "status": "open",
+      "tickets_sold": 100
+    }
+  ],
+  "price_rules": [
+    {
+      "id": "s001",
+      "room_name": "Room 01",
+      "room_category": "Phòng Thường",
+      "type": "2D",
+      "price": 110000
+    },
+    {
+      "id": "s002",
+      "room_name": "Room 05",
+      "room_category": "Phòng Thường",
+      "type": "2D",
+      "price": 110000
+    },
+    {
+      "id": "s003",
+      "room_name": "Room VIP",
+      "room_category": "VIP",
+      "type": "3D",
+      "price": 300000
+    },
+    {
+      "id": "s004",
+      "room_name": "Room 03",
+      "room_category": "Phòng Thường",
+      "type": "2D",
+      "price": 110000
+    },
+    {
+      "id": "s005",
+      "room_name": "Room 04",
+      "room_category": "Phòng Thường",
+      "type": "2D",
+      "price": 110000
+    },
+    {
+      "id": "s006",
+      "room_name": "Room 06",
+      "room_category": "Phòng Thường",
+      "type": "3D",
+      "price": 190000
+    },
+    {
+      "id": "s007",
+      "room_name": "Room VIP Plus",
+      "room_category": "VIP",
+      "type": "2D",
+      "price": 500000
+    },
+    {
+      "id": "s008",
+      "room_name": "Room VIP Max",
+      "room_category": "VIP",
+      "type": "3D",
+      "price": 999999
+    }
+  ],
+  "popcorns": [
+    {
+      "id": "p1",
+      "sku": "POP-L-001",
+      "name": "Large Butter Popcorn",
+      "type": "popcorn",
+      "size": "L",
+      "price": 55000,
+      "stock": 6,
+      "threshold": 5,
+      "allowed_days": [
+        "weekday"
+      ],
+      "allowed_ticket_types": [
+        "3D",
+        "2D",
+        "IMAX"
+      ],
+      "image": "https://m.media-amazon.com/images/I/91Rpt4H6zgL._SX679_PIbundle-3,TopRight,0,0_AA679SH20_.jpg",
+      "description": "",
+      "status": "active"
+    },
+    {
+      "id": "p2",
+      "sku": "POP-M-002",
+      "name": "Caramel Popcorn",
+      "type": "popcorn",
+      "size": "M",
+      "price": 45000,
+      "stock": 19,
+      "threshold": 6,
+      "allowed_days": [
+        "weekend",
+        "weekday",
+        "holiday"
+      ],
+      "allowed_ticket_types": [
+        "3D"
+      ],
+      "image": "https://www.cook2eatwell.com/wp-content/uploads/2020/09/Caramel-Popcorn-Image.jpg",
+      "description": "Sweet caramel popcorn, crispy and light.",
+      "status": "active"
+    },
+    {
+      "id": "d1",
+      "sku": "DRK-S-010",
+      "name": "Coca Cola Small",
+      "type": "drink",
+      "size": "S",
+      "price": 25000,
+      "stock": 30,
+      "threshold": 10,
+      "allowed_days": [
+        "weekday"
+      ],
+      "allowed_ticket_types": [
+        "2D",
+        "3D",
+        "IMAX"
+      ],
+      "image": "https://kosherkingdom.com/api/content/images/thumbs/0294987_coca-cola-small-coke-zero-bottles-500-ml.jpeg",
+      "description": "Chilled Coca Cola, small size.",
+      "status": "inactive"
+    },
+    {
+      "id": "c1",
+      "sku": "CMB-001",
+      "name": "IMAX Weekend Combo",
+      "type": "combo",
+      "size": "M",
+      "price": 75000,
+      "stock": 10,
+      "threshold": 3,
+      "allowed_days": [
+        "weekday"
+      ],
+      "allowed_ticket_types": [
+        "VIP",
+        "2D",
+        "IMAX"
+      ],
+      "image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSnO7fjc6KsEy3rpIvo_msfo9x7HST307tKQQ&s",
+      "description": "1 popcorn M + 1 Pepsi M. IMAX weekend only.",
+      "status": "inactive"
+    },
+    {
+      "id": "dddd",
+      "sku": "POP-L-005",
+      "name": "Bui Van Thiet",
+      "type": "popcorn",
+      "price": 24,
+      "stock": 3,
+      "image": "https://jbagy.me/wp-content/uploads/2025/03/Hinh-anh-doremon-cute-1.jpg",
+      "description": "AAAA",
+      "allowed_days": [
+        "weekday",
+        "weekend"
+      ],
+      "allowed_ticket_types": [
+        "3D",
+        "2D"
+      ],
+      "status": "active"
+    }
+  ]
+}
