@@ -28,6 +28,7 @@
       "name": "Room 01",
       "type": "2D Standard",
       "status": "active",
+      "total_seats": 150,
       "seat_types": {
         "A": "Standard",
         "B": "Standard",
@@ -39,6 +40,7 @@
       "name": "Room VIP",
       "type": "3D IMAX",
       "status": "active",
+      "total_seats": 100,
       "seat_types": {
         "A": "VIP",
         "B": "VIP",
@@ -50,28 +52,86 @@
       "name": "Room 05",
       "type": "2D Standard",
       "status": "maintenance",
+      "total_seats": 120,
       "seat_types": {
         "A": "Standard",
         "B": "VIP"
+      }
+    },
+    {
+      "id": "room04",
+      "name": "Room 03",
+      "type": "2D Standard",
+      "status": "active",
+      "total_seats": 150,
+      "seat_types": {
+        "A": "Standard",
+        "B": "Standard"
+      }
+    },
+    {
+      "id": "room05",
+      "name": "Room 04",
+      "type": "2D Standard",
+      "status": "active",
+      "total_seats": 150,
+      "seat_types": {
+        "A": "Standard",
+        "B": "Standard"
+      }
+    },
+    {
+      "id": "room06",
+      "name": "Room 06",
+      "type": "3D IMAX",
+      "status": "active",
+      "total_seats": 120,
+      "seat_types": {
+        "A": "Standard",
+        "B": "Standard"
+      }
+    },
+    {
+      "id": "room07",
+      "name": "Room VIP Plus",
+      "type": "2D Standard",
+      "status": "active",
+      "total_seats": 80,
+      "seat_types": {
+        "A": "VIP",
+        "B": "Couple"
+      }
+    },
+    {
+      "id": "room08",
+      "name": "Room VIP Max",
+      "type": "3D IMAX",
+      "status": "active",
+      "total_seats": 90,
+      "seat_types": {
+        "A": "VIP",
+        "B": "Couple"
       }
     }
   ],
   "showtimes": [
     {
       "id": "st001",
-      "movie_id": "mv001",
-      "room_id": "room01",
+      "movie_id": "mv002",
+      "room_id": "room02",
       "start_time": "2025-12-15T10:00:00",
       "end_time": "2025-12-15T12:46:00",
-      "status": "open"
+      "status": "open",
+      "tickets_sold": 25
     },
     {
       "id": "st002",
       "movie_id": "mv002",
-      "room_id": "room02",
+      "room_id": "room07",
       "start_time": "2025-12-15T13:00:00",
       "end_time": "2025-12-15T16:00:00",
-      "status": "open"
+      "status": "open",
+      "tickets_sold": 90
     },
     {
       "id": "st003",
@@ -79,49 +139,75 @@
       "room_id": "room01",
       "start_time": "2025-12-15T15:00:00",
       "end_time": "2025-12-15T17:46:00",
-      "status": "open"
+      "status": "open",
+      "tickets_sold": 15
     },
     {
       "id": "st004",
       "movie_id": "mv002",
-      "room_id": "room02",
+      "room_id": "room03",
       "start_time": "2025-12-15T18:00:00",
       "end_time": "2025-12-15T21:00:00",
-      "status": "sold_out"
+      "status": "open",
+      "tickets_sold": 100
     }
   ],
   "price_rules": [
     {
-      "id": "pr001",
-      "room_type": "2D Standard",
-      "seat_type": "Standard",
-      "weekday": 90000,
-      "weekend": 110000,
-      "holiday": 130000
+      "id": "s001",
+      "room_name": "Room 01",
+      "room_category": "Phòng Thường",
+      "type": "2D",
+      "price": 110000
     },
     {
-      "id": "pr002",
-      "room_type": "2D Standard",
-      "seat_type": "VIP",
-      "weekday": 110000,
-      "weekend": 130000,
-      "holiday": 150000
+      "id": "s002",
+      "room_name": "Room 05",
+      "room_category": "Phòng Thường",
+      "type": "2D",
+      "price": 110000
     },
     {
-      "id": "pr003",
-      "room_type": "3D IMAX",
-      "seat_type": "VIP",
-      "weekday": 150000,
-      "weekend": 190000,
-      "holiday": 230000
+      "id": "s003",
+      "room_name": "Room VIP",
+      "room_category": "VIP",
+      "type": "3D",
+      "price": 300000
     },
     {
-      "id": "pr004",
-      "room_type": "3D IMAX",
-      "seat_type": "Couple",
-      "weekday": 250000,
-      "weekend": 300000,
-      "holiday": 350000
+      "id": "s004",
+      "room_name": "Room 03",
+      "room_category": "Phòng Thường",
+      "type": "2D",
+      "price": 110000
+    },
+    {
+      "id": "s005",
+      "room_name": "Room 04",
+      "room_category": "Phòng Thường",
+      "type": "2D",
+      "price": 110000
+    },
+    {
+      "id": "s006",
+      "room_name": "Room 06",
+      "room_category": "Phòng Thường",
+      "type": "3D",
+      "price": 190000
+    },
+    {
+      "id": "s007",
+      "room_name": "Room VIP Plus",
+      "room_category": "VIP",
+      "type": "2D",
+      "price": 500000
+    },
+    {
+      "id": "s008",
+      "room_name": "Room VIP Max",
+      "room_category": "VIP",
+      "type": "3D",
+      "price": 999999
     }
   ],
   "popcorns": [
