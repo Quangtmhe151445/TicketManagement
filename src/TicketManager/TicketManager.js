@@ -22,6 +22,7 @@ const getStatusVariant = (status) => {
     case "open":
       return "success";
     case "sold_out":
+    case "full":
       return "warning";
     case "canceled":
       return "danger";
@@ -35,23 +36,24 @@ const getRoomCategory = (roomId) => {
   return vipRoomIds.includes(roomId) ? "VIP" : "Phòng Thường";
 };
 
-const getCalculatedBasePrice = (roomCategory, roomType) => {
-  const safeRoomType = roomType || "";
-  const is3D = safeRoomType.includes("3D");
 
-  if (roomCategory === "VIP") {
-    // Giá VIP: 999,999 (3D) hoặc 500,000 (2D)
-    return is3D ? 999999 : 500000;
+
+const getPriceFromRules = (roomName, roomType, priceRules) => {
+  if (!roomName || !roomType || !priceRules || priceRules.length === 0) {
+    return 0;
   }
-  // Giá Thường: 190,000 (3D) hoặc 110,000 (2D)
-  return is3D ? 190000 : 110000;
+
+  const typeInRule = roomType.includes("3D") ? "3D" : "2D";
+
+  const rule = priceRules.find(
+    (r) => r.room_name === roomName && r.type === typeInRule
+  );
+
+  return rule ? rule.price : 0;
 };
 
-/**
- * Chuẩn hóa và thêm các trường hiển thị vào dữ liệu suất chiếu
- */
 const normalizeShowtimes = (rawData) => {
-  if (!rawData || !rawData.movies || !rawData.rooms || !rawData.showtimes) {
+  if (!rawData || !rawData.movies || !rawData.rooms || !rawData.showtimes || !rawData.rules) {
     return [];
   }
 
@@ -64,7 +66,9 @@ const normalizeShowtimes = (rawData) => {
 
     const roomCategory = getRoomCategory(st.room_id);
     const roomType = room.type || "2D Standard";
-    const basePrice = getCalculatedBasePrice(roomCategory, roomType);
+    const roomName = room.name || "N/A";
+
+    const basePrice = getPriceFromRules(roomName, roomType, rawData.rules);
 
     const startTime = new Date(st.start_time);
 
@@ -90,49 +94,41 @@ const normalizeShowtimes = (rawData) => {
       room: room.name || "N/A",
       quantity: capacityDisplay,
       type: room.type || "N/A",
-      priceValue: basePrice, // Giá trị số để sắp xếp
-      price: formatCurrency(basePrice), // Giá trị đã format để hiển thị
+      priceValue: basePrice, 
+      price: formatCurrency(basePrice),
       status: st.status,
     };
   });
 };
 
-// ===================================
-// 🎬 COMPONENT CHÍNH
-// ===================================
-
 export default function TicketManagement() {
   const navigate = useNavigate();
 
-  // --- STATE DỮ LIỆU GỐC VÀ TẢI ---
   const [loading, setLoading] = useState(true);
   const [initialData, setInitialData] = useState([]);
   const [rawData, setRawData] = useState({
     movies: [],
     rooms: [],
-    rules: [],
+    rules: [], 
     showtimes: [],
   });
 
-  // --- STATE CHO LỌC ---
   const [filterType, setFilterType] = useState("All");
   const [filterFilm, setFilterFilm] = useState("All");
   const [filterStatus, setFilterStatus] = useState("All");
   const [searchTerm, setSearchTerm] = useState("");
 
-  // --- STATE CHO SẮP XẾP ---
   const [sortField, setSortField] = useState("showtime");
   const [isAsc, setIsAsc] = useState(true);
   const [isSorted, setIsSorted] = useState(true);
 
-  // --- DATA FETCHING (useEffect) ---
   useEffect(() => {
     setLoading(true);
     const endpoints = [
       "http://localhost:9999/movies",
       "http://localhost:9999/cinema_rooms",
       "http://localhost:9999/showtimes",
-      "http://localhost:9999/price_rules", // Giá trị này có thể không cần thiết nếu logic giá nằm cố định trong code
+      "http://localhost:9999/price_rules", 
     ];
 
     axios
@@ -143,24 +139,23 @@ export default function TicketManagement() {
             movies: moviesRes.data,
             rooms: roomsRes.data,
             showtimes: showtimesRes.data,
-            rules: rulesRes.data,
+            rules: rulesRes.data, 
           };
           setRawData(loadedData);
-          setInitialData(normalizeShowtimes(loadedData));
+          
+          setInitialData(normalizeShowtimes(loadedData)); 
         })
       )
       .catch((err) => console.error("Error fetching data:", err))
       .finally(() => setLoading(false));
   }, []);
 
-  // --- UNIQUE OPTIONS CHO BỘ LỌC (useMemo) ---
   const { uniqueFilms, uniqueTypes } = useMemo(() => {
     const films = ["All", ...new Set(rawData.movies.map((m) => m.title))];
     const types = ["All", ...new Set(rawData.rooms.map((r) => r.type))];
     return { uniqueFilms: films, uniqueTypes: types };
   }, [rawData.movies, rawData.rooms]);
 
-  // --- LOGIC LỌC (useMemo) ---
   const filteredList = useMemo(() => {
     return initialData.filter((ticket) => {
       const matchType = filterType === "All" || ticket.type === filterType;
@@ -178,7 +173,6 @@ export default function TicketManagement() {
     });
   }, [initialData, filterType, filterFilm, filterStatus, searchTerm]);
 
-  // --- LOGIC SẮP XẾP (useMemo) ---
   const finalList = useMemo(() => {
     if (!isSorted) {
       return filteredList;
@@ -190,14 +184,14 @@ export default function TicketManagement() {
       if (sortField === "filmName" || sortField === "showtime") {
         result = a[sortField].localeCompare(b[sortField], "vi");
       } else if (sortField === "id") {
-        // Xử lý so sánh ID có tiền tố (ví dụ: "st001")
+
         const idA = parseInt(a.id.slice(2));
         const idB = parseInt(b.id.slice(2));
         result = idA - idB;
       } else if (sortField === "priceValue") {
         result = a.priceValue - b.priceValue;
       } else if (sortField === "status") {
-        // Sắp xếp theo trạng thái (có thể thêm logic cụ thể hơn nếu cần)
+
         result = a.status.localeCompare(b.status);
       }
 
@@ -205,10 +199,9 @@ export default function TicketManagement() {
     });
   }, [filteredList, isSorted, sortField, isAsc]);
 
-  // --- XỬ LÝ SỰ KIỆN (useCallback) ---
   const handleSort = (field) => {
     setIsSorted(true);
-    // Đảo ngược thứ tự nếu nhấp vào trường đang được sắp xếp, nếu không thì mặc định là tăng dần (true)
+
     setIsAsc((prev) => (sortField === field ? !prev : true));
     setSortField(field);
   };
@@ -220,7 +213,6 @@ export default function TicketManagement() {
     [navigate]
   );
 
-  // --- HÀM RENDER TIỆN ÍCH ---
   const sortIndicator = (field) => {
     if (sortField === field) {
       return isAsc ? " ▲" : " ▼";
@@ -228,17 +220,14 @@ export default function TicketManagement() {
     return null;
   };
 
-  // Xác định các cột KHÔNG thể sắp xếp
   const unSortableKeys = ["quantity", "room", "type", "status", "action"];
 
-  // --- RENDER (JSX) ---
   return (
     <Container fluid className="p-4">
       <h2 className="text-center mb-4">🎬 Ticket Management (Showtimes)</h2>
 
-      {/* --- Bộ lọc và Tìm kiếm --- */}
       <Row className="mb-4 align-items-end g-3">
-        {/* Filter Type */}
+
         <Col md={2}>
           <Form.Label className="fw-bold text-secondary mb-0">Type</Form.Label>
           <Form.Select
@@ -256,7 +245,6 @@ export default function TicketManagement() {
           </Form.Select>
         </Col>
 
-        {/* Filter Film */}
         <Col md={3}>
           <Form.Label className="fw-bold text-secondary mb-0">Film</Form.Label>
           <Form.Select
@@ -274,7 +262,6 @@ export default function TicketManagement() {
           </Form.Select>
         </Col>
 
-        {/* Filter Status */}
         <Col md={2}>
           <Form.Label className="fw-bold text-secondary mb-0">
             Status
@@ -290,7 +277,6 @@ export default function TicketManagement() {
           </Form.Select>
         </Col>
 
-        {/* Search Term */}
         <Col md={5}>
           <Form.Label className="fw-bold text-secondary mb-0">
             Search
@@ -311,12 +297,17 @@ export default function TicketManagement() {
 
       <hr />
 
-      {/* --- Bảng Hiển thị --- */}
       <Row className="mb-3 align-items-center">
         <Col>
           <h4 className="mb-0 text-primary">
             Current Showtimes ({finalList.length} results)
           </h4>
+        </Col>
+        <Col xs="auto">
+          <Button variant="success" onClick={() => navigate("/create")}>
+            <i className="bi bi-plus-circle me-2"></i>
+            Create New Showtime
+          </Button>
         </Col>
       </Row>
 
@@ -409,7 +400,7 @@ export default function TicketManagement() {
                       </td>
                     </tr>
                   )}
-                  {/* Dòng trống để giữ chiều cao bảng */}
+
                   {[...Array(Math.max(0, 5 - finalList.length))].map(
                     (_, rowIndex) => (
                       <tr
