@@ -1,14 +1,13 @@
 import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
-import Timetable from "./TimeTable/PersonnelManagement";
 import MyNav from "./navbar.js";
 import MyFooter from "./footer.js";
 import Ticket from "./TicketManager/TicketManager.js";
 import PopCornManager from "./PopCorn/PopCornManager.js";
 import CinemaRoomManager from "./CinemaRoom/CinemaRoomManager.js";
-
-import Login from "./TimeTable/components/LoginForm.js";
 import EditTicketPage from "./TicketManager/EditTicketPage.js";
 import MovieList from "./movie_management/list-movie.js";
+import Timetable from "./timeTable/components/Timetable";
+import CreateTicketPage from "./TicketManager/CreateTicketPage.js";
 
 function App() {
   return (
@@ -16,11 +15,10 @@ function App() {
       <MyNav />
 
       <Routes>
-        <Route path="/login" element={<Login />} />
-
         <Route path="/movie-list" element={<MovieList />} />
 
         <Route path="/ticket" element={<Ticket />} />
+        <Route path="/create" element={<CreateTicketPage />} />
         <Route path="/edit/:ticketId" element={<EditTicketPage />} />
 
         <Route path="/popcorn" element={<PopCornManager />} />

@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo, useCallback } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import {
   Container,
   Row,
@@ -8,6 +8,7 @@ import {
   Button,
   Card,
   Spinner,
+  Alert,
 } from "react-bootstrap";
 import axios from "axios";
 
@@ -17,13 +18,10 @@ const formatCurrency = (amount) => {
 
 const getRoomCategory = (roomId) => {
   const vipRoomIds = ["room02", "room07", "room08"];
-  if (vipRoomIds.includes(roomId)) {
-    return "VIP";
-  }
-  return "Regular room";
+  return vipRoomIds.includes(roomId) ? "VIP" : "Regular Room";
 };
 
-const getCalculatedBasePriceByRule = (roomName, roomType, priceRules) => {
+const getCalculatedBasePrice = (roomName, roomType, priceRules) => {
   if (!roomName || !roomType || !priceRules || priceRules.length === 0) {
     return 0;
   }
@@ -37,124 +35,107 @@ const getCalculatedBasePriceByRule = (roomName, roomType, priceRules) => {
   return rule ? rule.price : 0;
 };
 
-const normalizeShowtimeData = (st, movieMap, roomMap) => {
-  const room = roomMap.get(st.room_id) || {};
-  const totalSeats = room.total_seats || 0;
-  const ticketsSold = st.tickets_sold || 0;
-  const safeSeatsRemaining = Math.max(0, totalSeats - ticketsSold);
-  const currentRoomType = room.type || "2D Standard";
-  const currentRoomCategory = getRoomCategory(st.room_id);
-
-  let capacityDisplay = `${safeSeatsRemaining} / ${totalSeats}`;
-  if (st.status === "canceled" || st.status === "sold_out") {
-    capacityDisplay = st.status.toUpperCase().replace("_", " ");
+const generateNewShowtimeId = (showtimes) => {
+  if (!showtimes || showtimes.length === 0) {
+    return "st001";
   }
 
-  const currentRoomName = room.name || "";
+  const maxId = showtimes.reduce((max, st) => {
+    const num = parseInt(st.id.slice(2));
+    return num > max ? num : max;
+  }, 0);
 
-  return {
-    Showtime: st.start_time,
-    Film: st.movie_id,
-    Room: st.room_id,
-    Type: currentRoomType,
-    RoomCategory: currentRoomCategory,
-    id: st.id,
-    CapacityStatus: capacityDisplay,
-    Status: st.status,
-    RoomName: currentRoomName, 
-  };
+  const newNum = maxId + 1;
+  return `st${newNum.toString().padStart(3, "0")}`;
 };
 
-function EditTicketPage() {
-  const { ticketId } = useParams();
+function CreateTicketPage() {
   const navigate = useNavigate();
 
   const [loading, setLoading] = useState(true);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [error, setError] = useState(null);
+
   const [dataLoaded, setDataLoaded] = useState({
     movies: [],
     cinema_rooms: [],
+    showtimes: [],
     price_rules: [], 
-    showtime: null,
   });
 
-  const [originalTicket, setOriginalTicket] = useState(null);
-  const [formData, setFormData] = useState({});
-
-  const selectedRoomName = useMemo(() => {
-    return dataLoaded.cinema_rooms.find((r) => r.id === formData.Room)?.name;
-  }, [formData.Room, dataLoaded.cinema_rooms]);
-
-  const calculatedBasePrice = useMemo(() => {
-
-    return getCalculatedBasePriceByRule(
-      selectedRoomName,
-      formData.Type,
-      dataLoaded.price_rules
-    );
-  }, [selectedRoomName, formData.Type, dataLoaded.price_rules]);
+  const [formData, setFormData] = useState({
+    Showtime: "", 
+    Film: "", 
+    Room: "", 
+    Type: "", 
+    RoomCategory: "", 
+    status: "open", 
+  });
 
   useEffect(() => {
-    if (!ticketId) {
-      setLoading(false);
-      return;
-    }
     setLoading(true);
     const endpoints = [
       "http://localhost:9999/movies",
       "http://localhost:9999/cinema_rooms",
-      `http://localhost:9999/showtimes/${ticketId}`,
-      "http://localhost:9999/price_rules",
+      "http://localhost:9999/showtimes",
+      "http://localhost:9999/price_rules", 
     ];
 
     axios
       .all(endpoints.map((endpoint) => axios.get(endpoint)))
       .then(
-     
-        axios.spread((moviesRes, roomsRes, showtimeRes, rulesRes) => {
-          const showtime = showtimeRes.data;
+        axios.spread((moviesRes, roomsRes, showtimesRes, rulesRes) => {
           const moviesData = moviesRes.data;
-          const roomsData = roomsRes.data;
-          const rulesData = rulesRes.data; 
-
-          const currentMovieMap = new Map(moviesData.map((m) => [m.id, m]));
-          const currentRoomMap = new Map(roomsData.map((r) => [r.id, r]));
+          const roomsData = roomsRes.data.filter((r) => r.status === "active");
 
           setDataLoaded({
             movies: moviesData,
             cinema_rooms: roomsData,
-            price_rules: rulesData, 
-            showtime: showtime,
+            showtimes: showtimesRes.data,
+            price_rules: rulesRes.data, 
           });
 
-          if (showtime) {
-            const initialData = normalizeShowtimeData(
-              showtime,
-              currentMovieMap,
-              currentRoomMap
-            );
+          if (moviesData.length > 0 && roomsData.length > 0) {
+            const defaultMovieId = moviesData[0].id;
+            const defaultRoomId = roomsData[0].id;
+            const defaultRoomType = roomsData[0].type;
+            const defaultRoomCategory = getRoomCategory(defaultRoomId);
 
-            setOriginalTicket(initialData);
-
-            setFormData({
-              Showtime: initialData.Showtime,
-              Film: initialData.Film,
-              Room: initialData.Room,
-              Type: initialData.Type,
-              RoomCategory: initialData.RoomCategory,
-              status: initialData.Status,
-            });
+            setFormData((prev) => ({
+              ...prev,
+              Film: defaultMovieId,
+              Room: defaultRoomId,
+              Type: defaultRoomType,
+              RoomCategory: defaultRoomCategory,
+            }));
           }
         })
       )
       .catch((err) => {
         console.error("Error fetching data:", err);
+        setError("Không thể tải dữ liệu Phim và Phòng. Vui lòng kiểm tra API.");
       })
       .finally(() => setLoading(false));
-  }, [ticketId]);
+  }, []);
+
+  const selectedRoomName = useMemo(() => {
+    return dataLoaded.cinema_rooms.find(
+        (r) => r.id === formData.Room
+      )?.name;
+  }, [formData.Room, dataLoaded.cinema_rooms]);
+  
+  const calculatedBasePrice = useMemo(() => {
+    return getCalculatedBasePrice(
+      selectedRoomName, 
+      formData.Type, 
+      dataLoaded.price_rules
+    );
+  }, [selectedRoomName, formData.Type, dataLoaded.price_rules]);
 
   const handleChange = useCallback(
     (e) => {
       const { id, value } = e.target;
+      setError(null); 
 
       setFormData((prev) => {
         let newState = { ...prev, [id]: value };
@@ -171,7 +152,6 @@ function EditTicketPage() {
             };
           }
         }
-
         return newState;
       });
     },
@@ -179,30 +159,44 @@ function EditTicketPage() {
   );
 
   const handleCancel = () => {
-    navigate("/ticket");
+    navigate("/ticket"); 
   };
 
   const handleSave = async (e) => {
     e.preventDefault();
 
+    if (!formData.Showtime || !formData.Film || !formData.Room) {
+      setError("Vui lòng điền đầy đủ Showtime, Film và Room.");
+      return;
+    }
+
+    setIsSubmitting(true);
+    setError(null);
+
+    const newId = generateNewShowtimeId(dataLoaded.showtimes);
+
     const dataToSave = {
-      start_time: formData.Showtime,
+      id: newId,
       movie_id: formData.Film,
       room_id: formData.Room,
+      start_time: formData.Showtime,
       status: formData.status,
+      tickets_sold: 0, 
     };
 
     try {
-      const response = await axios.patch(
-        `http://localhost:9999/showtimes/${ticketId}`,
+      const response = await axios.post(
+        "http://localhost:9999/showtimes",
         dataToSave
       );
-      console.log(`Update successful:`, response.data);
-      alert(`Showtime updated for ID #${ticketId}!`);
+      console.log(`Creation successful:`, response.data);
+      alert(`Showtime ${newId} created successfully! Base Price: ${formatCurrency(calculatedBasePrice)}`);
       navigate("/ticket");
     } catch (error) {
-      console.error("Error saving changes:", error);
-      alert("Failed to save changes.");
+      console.error("Error saving new showtime:", error);
+      setError("Lưu suất chiếu thất bại. Vui lòng kiểm tra server API.");
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -210,59 +204,50 @@ function EditTicketPage() {
     return (
       <Container className="my-5 text-center">
         <Spinner animation="border" role="status" className="mb-3" />
-        <h2 className="text-center">Loading Showtime Data...</h2>
-      </Container>
-    );
-  }
-
-  if (!originalTicket) {
-    return (
-      <Container className="my-5">
-        <h2 className="text-center text-danger">
-          Showtime ID: {ticketId} not found.
-        </h2>
+        <h2 className="text-center">Loading Movies and Rooms...</h2>
       </Container>
     );
   }
 
   return (
     <Container className="my-5">
-      <h2 className="mb-4 text-center">Edit Showtime #{originalTicket.id}</h2>
+      <h2 className="mb-4 text-center">🎬 Create New Showtime</h2>
       <Card className="p-4 shadow-lg">
         <Form onSubmit={handleSave}>
-          <h4 className="mb-4 text-primary">Modify Showtime Details</h4>
+          <h4 className="mb-4 text-primary">Showtime Configuration</h4>
+
+          {error && <Alert variant="danger">{error}</Alert>}
 
           <Row className="g-3 mb-4">
-            <Col md={2}>
-              <Form.Group controlId="id">
-                <Form.Label className="fw-bold">ID</Form.Label>
-                <Form.Control
-                  type="text"
-                  defaultValue={originalTicket.id}
-                  readOnly
-                />
-              </Form.Group>
-            </Col>
-            <Col md={4}>
+            <Col md={6}>
               <Form.Group controlId="Showtime">
-                <Form.Label className="fw-bold">Showtime</Form.Label>
+                <Form.Label className="fw-bold">
+                  Showtime (Date & Time) <span className="text-danger">*</span>
+                </Form.Label>
                 <Form.Control
                   type="datetime-local"
-                  value={formData.Showtime || ""}
+                  value={formData.Showtime}
                   onChange={handleChange}
+                  required
                 />
               </Form.Group>
             </Col>
             <Col md={6}>
               <Form.Group controlId="Film">
-                <Form.Label className="fw-bold">Film</Form.Label>
+                <Form.Label className="fw-bold">
+                  Film <span className="text-danger">*</span>
+                </Form.Label>
                 <Form.Select
-                  value={formData.Film || ""}
+                  value={formData.Film}
                   onChange={handleChange}
+                  required
                 >
+                  <option value="" disabled>
+                    Select a Film
+                  </option>
                   {dataLoaded.movies.map((movie) => (
                     <option key={movie.id} value={movie.id}>
-                      {movie.title}
+                      {movie.title} ({movie.status === 'coming_soon' ? 'Coming soon' : 'Now showing'})
                     </option>
                   ))}
                 </Form.Select>
@@ -273,11 +258,17 @@ function EditTicketPage() {
           <Row className="g-3 mb-4 align-items-end">
             <Col md={3}>
               <Form.Group controlId="Room">
-                <Form.Label className="fw-bold">Room</Form.Label>
+                <Form.Label className="fw-bold">
+                  Room <span className="text-danger">*</span>
+                </Form.Label>
                 <Form.Select
-                  value={formData.Room || ""}
+                  value={formData.Room}
                   onChange={handleChange}
+                  required
                 >
+                  <option value="" disabled>
+                    Select a Room
+                  </option>
                   {dataLoaded.cinema_rooms.map((room) => (
                     <option key={room.id} value={room.id}>
                       {room.name} ({room.id})
@@ -296,7 +287,7 @@ function EditTicketPage() {
                   readOnly
                   style={{
                     backgroundColor:
-                      formData.RoomCategory === "VIP" ? "#ffebee" : "#f0f8ff",
+                      formData.RoomCategory === "VIP" ? "#fff0f0" : "#f0f8ff",
                   }}
                 />
               </Form.Group>
@@ -304,9 +295,7 @@ function EditTicketPage() {
 
             <Col md={3}>
               <Form.Group controlId="Type">
-                <Form.Label className="fw-bold">
-                  Type (Affects Price)
-                </Form.Label>
+                <Form.Label className="fw-bold">Type (3D/2D)</Form.Label>
                 <Form.Control
                   type="text"
                   value={formData.Type || "N/A"}
@@ -335,27 +324,15 @@ function EditTicketPage() {
 
           <hr />
 
-          <h4 className="mb-4 text-secondary">Status & Capacity (Context)</h4>
           <Row className="g-3 mb-4">
             <Col md={6}>
-              <Form.Group controlId="readCapacity">
-                <Form.Label className="fw-bold">Seats Left/Total</Form.Label>
-                <Form.Control
-                  type="text"
-                  defaultValue={originalTicket.CapacityStatus}
-                  readOnly
-                />
-              </Form.Group>
-            </Col>
-            <Col md={6}>
               <Form.Group controlId="status">
-                <Form.Label className="fw-bold">Status</Form.Label>
-                <Form.Select
-                  value={formData.status || "open"}
-                  onChange={handleChange}
-                >
-                  <option value="open">Open</option>
-                  <option value="sold_out">Sold Out</option>
+                <Form.Label className="fw-bold">Initial Status</Form.Label>
+                <Form.Select value={formData.status} onChange={handleChange}>
+                  <option value="open">Open (Active)</option>
+                  <option value="sold_out" disabled>
+                    Sold Out (Disabled for creation)
+                  </option>
                   <option value="canceled">Canceled</option>
                 </Form.Select>
               </Form.Group>
@@ -363,11 +340,30 @@ function EditTicketPage() {
           </Row>
 
           <div className="d-flex justify-content-end pt-3">
-            <Button variant="secondary" className="me-2" onClick={handleCancel}>
+            <Button
+              variant="secondary"
+              className="me-2"
+              onClick={handleCancel}
+              disabled={isSubmitting}
+            >
               Cancel
             </Button>
-            <Button variant="success" type="submit">
-              Save Changes
+            <Button variant="success" type="submit" disabled={isSubmitting}>
+              {isSubmitting ? (
+                <>
+                  <Spinner
+                    as="span"
+                    animation="border"
+                    size="sm"
+                    role="status"
+                    aria-hidden="true"
+                    className="me-1"
+                  />
+                  Creating...
+                </>
+              ) : (
+                "Create Showtime"
+              )}
             </Button>
           </div>
         </Form>
@@ -376,4 +372,4 @@ function EditTicketPage() {
   );
 }
 
-export default EditTicketPage;
+export default CreateTicketPage;

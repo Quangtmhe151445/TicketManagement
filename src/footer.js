@@ -15,7 +15,7 @@ function Footer() {
       }}
     >
       <div className="text-center" style={{ color: "white" }}>
-        Assignment FER2023 - TicketManager - Group 1
+        Assignment FER202 - Cinema Management - Group 1
       </div>
     </Row>
   );
