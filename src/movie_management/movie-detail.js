@@ -46,27 +46,27 @@ const MovieDetail = () => {
         setMovie(movieData);
       } else {
         alert('Movie not found!');
-        navigate('/');
+        navigate('/movie-list');
       }
     } catch (error) {
       console.error('Error loading data:', error);
       alert('Cannot load data. Please ensure the API server is running on http://localhost:9999');
-      navigate('/');
+      navigate('/movie-list');
     } finally {
       setLoading(false);
     }
   };
 
   const getPublisher = () => {
-    return publishers.find(p => p.id === movie?.publisherId);
+    return publishers.find(p => parseInt(p.id) === parseInt(movie?.publisherId));
   };
 
   const getAgeRating = () => {
-    return ageRatings.find(r => r.id === movie?.ageRatingId);
+    return ageRatings.find(r => parseInt(r.id) === parseInt(movie?.ageRatingId));
   };
 
   const getStatus = () => {
-    return movieStatus.find(s => s.id === movie?.statusId);
+    return movieStatus.find(s => parseInt(s.id) === parseInt(movie?.statusId));
   };
 
   const getStatusBadge = () => {
@@ -136,7 +136,7 @@ const MovieDetail = () => {
         <div className="card shadow-sm">
           {/* Movie Header Section */}
           <div className="card-header bg-gradient p-4" style={{background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)'}}>
-            <h1 className="display-4 mb-3 text-white">{movie.title}</h1>
+            <h1 className="display-4 mb-3 text-black">{movie.title}</h1>
           </div>
 
           {/* Content Section */}
@@ -170,10 +170,10 @@ const MovieDetail = () => {
                 {/* Status Badge */}
                 <div className="d-flex gap-2 mb-4">
                   <span className={`badge bg-${getStatusBadge()} fs-6 px-3 py-2`}>
-                    {status?.label}
+                    {status?.label || 'N/A'}
                   </span>
                   <span className="badge bg-warning text-dark fs-6 px-3 py-2">
-                    {ageRating?.code}
+                    {ageRating?.code || 'N/A'}
                   </span>
                 </div>
 
@@ -194,8 +194,8 @@ const MovieDetail = () => {
                     <div className="card bg-light border">
                       <div className="card-body">
                         <h6 className="card-subtitle mb-2 text-muted">Age Rating</h6>
-                        <p className="card-text fs-4 fw-bold mb-1">{ageRating?.code}</p>
-                        <p className="card-text small text-muted mb-0">{ageRating?.description}</p>
+                        <p className="card-text fs-4 fw-bold mb-1">{ageRating?.code || 'N/A'}</p>
+                        <p className="card-text small text-muted mb-0">{ageRating?.description || 'N/A'}</p>
                       </div>
                     </div>
                   </div>
@@ -205,8 +205,8 @@ const MovieDetail = () => {
                     <div className="card bg-light border">
                       <div className="card-body">
                         <h6 className="card-subtitle mb-2 text-muted">Publisher</h6>
-                        <p className="card-text fs-5 fw-bold mb-1">{publisher?.name}</p>
-                        <span className="badge bg-secondary">{publisher?.country}</span>
+                        <p className="card-text fs-5 fw-bold mb-1">{publisher?.name || 'N/A'}</p>
+                        <span className="badge bg-secondary">{publisher?.country || 'N/A'}</span>
                       </div>
                     </div>
                   </div>
@@ -216,8 +216,8 @@ const MovieDetail = () => {
                     <div className="card bg-light border">
                       <div className="card-body">
                         <h6 className="card-subtitle mb-2 text-muted">Status</h6>
-                        <p className="card-text fs-5 fw-bold mb-1">{status?.label}</p>
-                        <p className="card-text small text-muted mb-0">Code: {status?.code}</p>
+                        <p className="card-text fs-5 fw-bold mb-1">{status?.label || 'N/A'}</p>
+                        <p className="card-text small text-muted mb-0">Code: {status?.code || 'N/A'}</p>
                       </div>
                     </div>
                   </div>

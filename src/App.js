@@ -9,6 +9,7 @@ import EditTicketPage from "./TicketManager/EditTicketPage.js";
 import AddMovie from "./movie_management/add-movie.js";
 import EditMovie from "./movie_management/edit-movie.js";
 import MovieDetail from "./movie_management/movie-detail.js";
+import MovieList from "./movie_management/list-movie.js"
 
 function App() {
   return (
