@@ -1,96 +1,98 @@
 import { Container, Row, Col } from "react-bootstrap";
-import { useState, useMemo, useEffect } from "react";
+import { useState, useEffect } from "react";
 import PopCornForm from "./PopCornForm";
-import PopCornFilters from "./PopCornFilters";
 import PopCornGrid from "./PopCornGrid";
 
-const money = (n) => Number(n || 0).toLocaleString() + "₫";
-const genId = () => "x" + Date.now().toString(36).slice(-6);
+const API = "http://localhost:9999";
+const money = n => Number(n || 0).toLocaleString() + "₫";
+const genId = () => "p" + Date.now().toString(36);
 
 export default function PopCornManager() {
-  const [items, setItems] = useState([]);
-
-  useEffect(() => {
-    fetch("http://localhost:9999/popcorns")
-      .then(res => res.json())
-      .then(data => setItems(data))
-      .catch(err => console.error(err));
-  }, []);
-
   const emptyForm = {
     id: null,
     sku: "",
     name: "",
-    category: "",
     type: "popcorn",
-    size: "",
     price: "",
     stock: 0,
-    threshold: 5,
     image: "",
     description: "",
+    allowed_days: [],
+    allowed_ticket_types: [],
     status: "active",
   };
 
+  const [items, setItems] = useState([]);
   const [form, setForm] = useState(emptyForm);
 
-  const setF = (key, value) =>
-    setForm(f => ({ ...f, [key]: value }));
+  const load = () =>
+    fetch(`${API}/popcorns`)
+      .then(r => r.json())
+      .then(setItems);
 
-  const resetForm = () => setForm(emptyForm);
+  useEffect(() => {
+    load();
+  }, []);
 
-  const save = () => {
-    if (!form.sku || !form.name)
-      return alert("Thiếu SKU / Tên");
+  const setF = (k, v) => setForm(f => ({ ...f, [k]: v }));
+
+  // ✅ SAVE (CREATE + UPDATE chuẩn)
+  const save = async () => {
+    // ---- VALIDATE TRÙNG SKU / NAME ----
+    const duplicated = items.find(
+      i =>
+        i.id !== form.id &&
+        (i.sku.trim().toLowerCase() === form.sku.trim().toLowerCase() ||
+         i.name.trim().toLowerCase() === form.name.trim().toLowerCase())
+    );
+
+    if (duplicated) {
+      alert("SKU hoặc tên sản phẩm đã tồn tại");
+      return;
+    }
+
+    const isCreate = !form.id;
 
     const payload = {
       ...form,
+      id: isCreate ? genId() : form.id,
       price: +form.price,
       stock: +form.stock,
-      id: form.id || genId(),
     };
 
-    setItems(prev =>
-      prev.some(i => i.id === payload.id)
-        ? prev.map(i => i.id === payload.id ? payload : i)
-        : [payload, ...prev]
-    );
+    await fetch(`${API}/popcorns${isCreate ? "" : "/" + form.id}`, {
+      method: isCreate ? "POST" : "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload),
+    });
 
-    resetForm();
+    setForm(emptyForm);
+    load();
   };
 
-  const remove = (id) => {
-    if (window.confirm("Xóa?")) {
-      setItems(prev => prev.filter(i => i.id !== id));
-    }
+  const toggleSelling = async id => {
+    const item = items.find(i => i.id === id);
+
+    await fetch(`${API}/popcorns/${id}`, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        ...item,
+        status: item.status === "active" ? "inactive" : "active",
+      }),
+    });
+
+    load();
   };
 
-  const startEdit = (item) => setForm(item);
+  const deleteItem = async id => {
+    if (!window.confirm("Delete this product?")) return;
 
-  const toggleStatus = (id) => {
-    setItems(prev =>
-      prev.map(i =>
-        i.id === id
-          ? { ...i, status: i.status === "active" ? "inactive" : "active" }
-          : i
-      )
-    );
+    await fetch(`${API}/popcorns/${id}`, { method: "DELETE" });
+
+    if (form.id === id) setForm(emptyForm);
+    load();
   };
-
-  const [q, setQ] = useState("");
-  const [filterCategory, setFilterCategory] = useState("");
-
-  const categories = useMemo(
-    () => [...new Set(items.map(i => i.category))],
-    [items]
-  );
-
-  const filtered = items.filter(
-    i =>
-      (q === "" ||
-        `${i.name} ${i.sku}`.toLowerCase().includes(q.toLowerCase())) &&
-      (!filterCategory || i.category === filterCategory)
-  );
 
   return (
     <Container fluid className="py-4">
@@ -99,26 +101,18 @@ export default function PopCornManager() {
           <PopCornForm
             form={form}
             setF={setF}
-            resetForm={resetForm}
+            resetForm={() => setForm(emptyForm)}
             save={save}
-          />
-
-          <PopCornFilters
-            q={q}
-            setQ={setQ}
-            categories={categories}
-            filterCategory={filterCategory}
-            setFilterCategory={setFilterCategory}
           />
         </Col>
 
         <Col md={8}>
           <PopCornGrid
-            items={filtered}
-            startEdit={startEdit}
-            remove={remove}
+            items={items}
+            startEdit={item => setForm(item)}
+            toggleSelling={toggleSelling}
+            deleteItem={deleteItem}
             money={money}
-            toggleStatus={toggleStatus}
           />
         </Col>
       </Row>
