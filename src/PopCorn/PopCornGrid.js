@@ -40,7 +40,7 @@ export default function PopCornGrid({
 
   return (
     <>
-      {/* Filter bar */}
+
       <Card className="mb-3 shadow-sm">
         <Card.Body className="d-flex gap-2">
           <InputGroup style={{ maxWidth: 260 }}>
@@ -62,8 +62,6 @@ export default function PopCornGrid({
             <option>3D</option>
             <option>IMAX</option>
             <option>VIP</option>
-            <option>Student</option>
-            <option>Couple</option>
           </Form.Select>
         </Card.Body>
       </Card>

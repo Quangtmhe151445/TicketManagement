@@ -268,8 +268,7 @@
       "allowed_ticket_types": [
         "2D",
         "3D",
-        "IMAX",
-        "Student"
+        "IMAX"
       ],
       "image": "https://kosherkingdom.com/api/content/images/thumbs/0294987_coca-cola-small-coke-zero-bottles-500-ml.jpeg",
       "description": "Chilled Coca Cola, small size.",

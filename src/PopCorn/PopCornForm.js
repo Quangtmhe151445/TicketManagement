@@ -15,7 +15,7 @@ const DAY_OPTIONS = [
   { value: "holiday", label: "Holiday" },
 ];
 
-const TICKET_OPTIONS = ["2D", "3D", "IMAX", "VIP", "Student", "Couple"];
+const TICKET_OPTIONS = ["2D", "3D", "IMAX", "VIP"];
 
 export default function PopCornForm({ form, setF, resetForm, save }) {
   const [errors, setErrors] = useState({});
@@ -100,7 +100,7 @@ export default function PopCornForm({ form, setF, resetForm, save }) {
                   isInvalid={!!errors.price}
                   onChange={(e) => setF("price", e.target.value)}
                 />
-                <InputGroup.Text>₫</InputGroup.Text>
+                <InputGroup.Text>$</InputGroup.Text>
               </InputGroup>
               <div className="text-danger small">{errors.price}</div>
             </Form.Group>
@@ -170,7 +170,7 @@ export default function PopCornForm({ form, setF, resetForm, save }) {
           )}
         </Form.Group>
 
-        {/* TICKETS */}
+
         <Form.Group className="mb-3">
           <Form.Label>Allowed Ticket Types *</Form.Label>
           {TICKET_OPTIONS.map((t) => (
@@ -196,7 +196,7 @@ export default function PopCornForm({ form, setF, resetForm, save }) {
           )}
         </Form.Group>
 
-        {/* ACTION */}
+
         <div className="d-flex justify-content-end gap-2">
           <Button variant="outline-secondary" onClick={resetForm}>
             Reset

@@ -36,9 +36,7 @@ export default function PopCornManager() {
 
   const setF = (k, v) => setForm(f => ({ ...f, [k]: v }));
 
-  // ✅ SAVE (CREATE + UPDATE chuẩn)
   const save = async () => {
-    // ---- VALIDATE TRÙNG SKU / NAME ----
     const duplicated = items.find(
       i =>
         i.id !== form.id &&
@@ -47,7 +45,7 @@ export default function PopCornManager() {
     );
 
     if (duplicated) {
-      alert("SKU hoặc tên sản phẩm đã tồn tại");
+      alert("SKU or product name already exists");
       return;
     }
 
