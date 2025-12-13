@@ -1,26 +1,112 @@
 {
-  "movies": [
+  "publishers": [
     {
-      "id": "mv001",
-      "title": "Avengers: Endgame",
-      "duration": 181,
-      "genre": ["Action", "Sci-fi"],
-      "rating": "C13",
-      "status": "now_showing",
-      "poster_url": "/images/movies/endgame.jpg",
-      "trailer_url": "https://youtube.com/abc",
-      "publisher": "Marvel Studios"
+      "id": 1,
+      "name": "Studio Ghibli",
+      "country": "Japan"
     },
     {
-      "id": "mv002",
-      "title": "Inside Out 2",
-      "duration": 110,
-      "genre": ["Animation", "Family"],
-      "rating": "P",
-      "status": "coming_soon",
-      "poster_url": "/images/movies/insideout2.jpg",
-      "trailer_url": "https://youtube.com/xyz",
-      "publisher": "Pixar"
+      "id": 2,
+      "name": "Disney",
+      "country": "USA"
+    },
+    {
+      "id": 3,
+      "name": "Toho",
+      "country": "Japan"
+    },
+    {
+      "id": 4,
+      "name": "Warner Bros",
+      "country": "USA"
+    }
+  ],
+
+  "ageRatings": [
+    {
+      "id": 1,
+      "code": "P",
+      "description": "Phù hợp với mọi độ tuổi"
+    },
+    {
+      "id": 2,
+      "code": "C13",
+      "description": "Không dành cho khán giả dưới 13 tuổi"
+    },
+    {
+      "id": 3,
+      "code": "C16",
+      "description": "Không dành cho khán giả dưới 16 tuổi"
+    },
+    {
+      "id": 4,
+      "code": "C18",
+      "description": "Không dành cho khán giả dưới 18 tuổi"
+    }
+  ],
+
+  "movieStatus": [
+    {
+      "id": 1,
+      "code": "now-showing",
+      "label": "Đang chiếu"
+    },
+    {
+      "id": 2,
+      "code": "coming-soon",
+      "label": "Sắp chiếu"
+    },
+    {
+      "id": 3,
+      "code": "ended",
+      "label": "Ngưng chiếu"
+    }
+  ],
+
+  "movies": [
+    {
+      "id": 1,
+      "title": "Your Name",
+      "genre": ["Romance", "Drama"],
+      "duration": 106,
+      "poster": "/img/yourname.jpg",
+      "trailer": "https://youtu.be/xU47nhruN-Q",
+      "statusId": 1,
+      "publisherId": 3,
+      "ageRatingId": 2
+    },
+    {
+      "id": 2,
+      "title": "Spirited Away",
+      "genre": ["Fantasy", "Adventure"],
+      "duration": 125,
+      "poster": "/img/spirited.jpg",
+      "trailer": "https://youtu.be/ByXuk9QqQkk",
+      "statusId": 2,
+      "publisherId": 1,
+      "ageRatingId": 1
+    },
+    {
+      "id": 3,
+      "title": "The Dark Knight",
+      "genre": ["Action", "Crime"],
+      "duration": 152,
+      "poster": "/img/darkknight.jpg",
+      "trailer": "https://youtu.be/EXeTwQWrcwY",
+      "statusId": 1,
+      "publisherId": 4,
+      "ageRatingId": 3
+    },
+    {
+      "id": 4,
+      "title": "Inception",
+      "genre": ["Sci-Fi", "Thriller"],
+      "duration": 148,
+      "poster": "/img/inception.jpg",
+      "trailer": "https://youtu.be/YoHD9XEInc0",
+      "statusId": 3,
+      "publisherId": 4,
+      "ageRatingId": 3
     }
   ],
   "cinema_rooms": [
