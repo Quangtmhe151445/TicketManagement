@@ -4,7 +4,7 @@ import PopCornForm from "./PopCornForm";
 import PopCornGrid from "./PopCornGrid";
 
 const API = "http://localhost:9999";
-const money = n => Number(n || 0).toLocaleString() + "₫";
+const money = n => Number(n || 0).toLocaleString() + "$";
 const genId = () => "p" + Date.now().toString(36);
 
 export default function PopCornManager() {
