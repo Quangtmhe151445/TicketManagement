@@ -280,7 +280,7 @@ function EditTicketPage() {
                 >
                   {dataLoaded.cinema_rooms.map((room) => (
                     <option key={room.id} value={room.id}>
-                      {room.name} ({room.id})
+                      {room.name}
                     </option>
                   ))}
                 </Form.Select>

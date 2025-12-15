@@ -59,7 +59,6 @@ function MyNav() {
             )}
           </Nav>
 
-          {/* Nút Login/Logout */}
           <Nav>
             <Nav.Link onClick={handleAuthClick}>
               {isLoggedIn ? (
