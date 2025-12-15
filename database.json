@@ -450,39 +450,39 @@
     {
       "id": "1",
       "code": "P",
-      "description": "Suitable for all ages"
+      "description": "Phù hợp với mọi độ tuổi"
     },
     {
       "id": "2",
       "code": "C13",
-      "description": "Not suitable for audiences under 13 years old"
+      "description": "Không dành cho khán giả dưới 13 tuổi"
     },
     {
       "id": "3",
       "code": "C16",
-      "description": "Not suitable for audiences under 16 years old"
+      "description": "Không dành cho khán giả dưới 16 tuổi"
     },
     {
       "id": "4",
       "code": "C18",
-      "description": "Not suitable for audiences under 18 years old"
+      "description": "Không dành cho khán giả dưới 18 tuổi"
     }
   ],
   "movieStatus": [
     {
       "id": "1",
       "code": "now-showing",
-      "label": "Now Showing"
+      "label": "Đang chiếu"
     },
     {
       "id": "2",
       "code": "coming-soon",
-      "label": "Coming Soon"
+      "label": "Sắp chiếu"
     },
     {
       "id": "3",
       "code": "ended",
-      "label": "No Longer Showing"
+      "label": "Ngưng chiếu"
     }
   ],
   "movies": [

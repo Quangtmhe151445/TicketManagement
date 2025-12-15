@@ -87,8 +87,11 @@ const normalizeShowtimes = (rawData) => {
     return {
       id: st.id,
       showtime: startTime.toLocaleTimeString("vi-VN", {
-        hour: "2-digit",
-        minute: "2-digit",
+       year: "numeric",
+      month: "2-digit",
+      day: "2-digit",
+      hour: "2-digit",
+      minute: "2-digit",
       }),
       filmName: movie.title || "N/A",
       room: room.name || "N/A",
@@ -316,7 +319,7 @@ export default function TicketManagement() {
           {loading ? (
             <div className="text-center p-5">
               <Spinner animation="border" role="status" />
-              <p className="mt-2">Đang tải dữ liệu lịch chiếu...</p>
+              <p className="mt-2">Loading screening schedule data...</p>
             </div>
           ) : (
             <div
