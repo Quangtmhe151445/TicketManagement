@@ -6,7 +6,7 @@ import Ticket from "./TicketManager/TicketManager.js";
 import PopCornManager from "./PopCorn/PopCornManager.js";
 import CinemaRoomManager from "./CinemaRoom/CinemaRoomManager.js";
 import EditTicketPage from "./TicketManager/EditTicketPage.js";
-import ShowtimeManagement from ".showTimes/ShowtimeManagement.js";
+import ShowtimeManagement from "./showtimes/ShowtimeManagement.js";
 
 function App() {
   return (
