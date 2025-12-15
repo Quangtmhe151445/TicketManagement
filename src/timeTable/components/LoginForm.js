@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { Button, Form, Card, Container } from "react-bootstrap";
-import "./Lg.css";
 
 const Login = ({ onLogin }) => {
   const [username, setUsername] = useState("");
@@ -16,7 +15,7 @@ const Login = ({ onLogin }) => {
       .then((users) => {
         console.log("Users từ server:", users);
 
-        if (users.length > 0 || password.length < 8) {
+        if (users.length > 0) {
           const user = users[0]; // Đây là user đăng nhập
           console.log("Role:", user.role);
 
@@ -39,7 +38,7 @@ const Login = ({ onLogin }) => {
   };
 
   return (
-    <Container className="  py-5">
+    <Container className="py-5">
       <Card className="p-4 mx-auto shadow" style={{ maxWidth: "400px" }}>
         <h4 className="mb-3 text-center">🔐 Login</h4>
         <Form onSubmit={handleLogin}>
