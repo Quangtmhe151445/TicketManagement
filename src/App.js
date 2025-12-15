@@ -6,7 +6,7 @@ import PopCornManager from "./PopCorn/PopCornManager.js";
 import CinemaRoomManager from "./CinemaRoom/CinemaRoomManager.js";
 import EditTicketPage from "./TicketManager/EditTicketPage.js";
 import MovieList from "./movie_management/list-movie.js";
-import Timetable from "./timeTable/components/Timetable";
+import Timetable from "./TimeTable/PersonnelManagement.js";
 import CreateTicketPage from "./TicketManager/CreateTicketPage.js";
 
 function App() {
