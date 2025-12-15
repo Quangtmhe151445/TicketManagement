@@ -1,4 +1,3 @@
-// src/CinemaRoom/CinemaRoomManager.js
 import React, { useEffect, useState } from 'react';
 import { Container, Row, Col, Button, Alert, Spinner } from 'react-bootstrap';
 import RoomList from './RoomList';
@@ -64,7 +63,7 @@ function CinemaRoomManager() {
       if (!res.ok) {
         const text = await res.text();
         console.error('API ERROR:', text);
-        throw new Error('Failed to load room data'); // Dịch: Không tải được dữ liệu phòng
+        throw new Error('Failed to load room data');
       }
       const data = await res.json();
       setRooms(data);
@@ -82,12 +81,24 @@ function CinemaRoomManager() {
 
   const handleSave = async (formData, room) => {
     setError(null);
+    const isEditing = !!room;
+    const newRoomName = formData.name.trim();
+
+    const isDuplicate = rooms.some(r => 
+        r.name.trim().toLowerCase() === newRoomName.toLowerCase() && 
+        (!isEditing || r.id !== room.id) 
+    );
+
+    if (isDuplicate) {
+        setError(`Room name "${newRoomName}" already exists. Please choose a different name.`);
+        return; 
+    }
 
     const seatData = buildSeatData(formData);
 
     const newRoom = {
       id: room ? room.id : `room_${Date.now()}`,
-      name: formData.name,
+      name: newRoomName, 
       type: formData.type,
       status: formData.status,
       ...seatData
@@ -103,7 +114,7 @@ function CinemaRoomManager() {
         body: JSON.stringify(newRoom)
       });
 
-      if (!res.ok) throw new Error('Failed to save room'); // Dịch: Lưu phòng thất bại
+      if (!res.ok) throw new Error('Failed to save room');
 
       setShowForm(false);
       setCurrentRoom(null);
@@ -115,13 +126,13 @@ function CinemaRoomManager() {
   };
 
   const handleDelete = async (roomId) => {
-    if (!window.confirm('Are you sure you want to delete this room?')) return; // Dịch: Bạn có chắc muốn xóa phòng này?
+    if (!window.confirm('Are you sure you want to delete this room?')) return;
 
     try {
       const res = await fetch(`${API_URL}/${roomId}`, {
         method: 'DELETE'
       });
-      if (!res.ok) throw new Error('Deletion failed'); // Dịch: Xóa thất bại
+      if (!res.ok) throw new Error('Deletion failed');
       fetchRooms();
     } catch (err) {
       console.error('DELETE ERROR:', err);
@@ -132,13 +143,12 @@ function CinemaRoomManager() {
   if (loading) {
     return (
       <Container className="text-center mt-5">
-        <Spinner animation="border" /> <div>Loading data...</div> {/* Dịch: Đang tải dữ liệu... */}
+        <Spinner animation="border" /> <div>Loading data...</div>
       </Container>
     );
   }
 
   return (
-    // Thêm class 'pb-5' để đảm bảo có đủ khoảng trống dưới cùng, khắc phục lỗi "footer"
     <Container className="mt-4 pb-5"> 
       <h3 className="text-center mb-4">🎬 Cinema Room Manager</h3>
 
