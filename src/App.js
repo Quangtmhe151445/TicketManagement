@@ -6,6 +6,7 @@ import Ticket from "./TicketManager/TicketManager.js";
 import PopCornManager from "./PopCorn/PopCornManager.js";
 import CinemaRoomManager from "./CinemaRoom/CinemaRoomManager.js";
 import EditTicketPage from "./TicketManager/EditTicketPage.js";
+import ShowtimeManagement from ".showTimes/ShowtimeManagement.js";
 
 function App() {
   return (
@@ -29,6 +30,7 @@ function App() {
         <Route path="/timetable" element={<Timetable />} />
         {/* Đường dẫn của component Quản lý Phòng Chiếu */}
         <Route path="/cinema-rooms" element={<CinemaRoomManager />} />
+        <Route path="/showtimes" element={<ShowtimeManagement />} />
       </Routes>
 
       <MyFooter />
