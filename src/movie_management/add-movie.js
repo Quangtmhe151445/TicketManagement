@@ -1,20 +1,20 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { useNavigate } from 'react-router-dom';
-import * as XLSX from 'xlsx';
+import React, { useState, useEffect, useRef } from "react";
+import { useNavigate } from "react-router-dom";
+import * as XLSX from "xlsx";
 
 const API_URL = "http://localhost:9999";
 
 const AddMovie = () => {
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
-    title: '',
-    genre: '',
-    duration: '',
-    poster: '',
-    trailer: '',
-    statusId: '',
-    publisherId: '',
-    ageRatingId: ''
+    title: "",
+    genre: "",
+    duration: "",
+    poster: "",
+    trailer: "",
+    statusId: "",
+    publisherId: "",
+    ageRatingId: "",
   });
 
   const [publishers, setPublishers] = useState([]);
@@ -33,25 +33,27 @@ const AddMovie = () => {
       const [publishersRes, ratingsRes, statusRes] = await Promise.all([
         fetch(`${API_URL}/publishers`),
         fetch(`${API_URL}/ageRatings`),
-        fetch(`${API_URL}/movieStatus`)
+        fetch(`${API_URL}/movieStatus`),
       ]);
 
       if (!publishersRes.ok || !ratingsRes.ok || !statusRes.ok) {
-        throw new Error('Failed to fetch data');
+        throw new Error("Failed to fetch data");
       }
 
       const [publishersData, ratingsData, statusData] = await Promise.all([
         publishersRes.json(),
         ratingsRes.json(),
-        statusRes.json()
+        statusRes.json(),
       ]);
 
       setPublishers(publishersData);
       setAgeRatings(ratingsData);
       setMovieStatus(statusData);
     } catch (error) {
-      console.error('Error loading data:', error);
-      alert('Cannot load data. Please ensure the API server is running on http://localhost:9999');
+      console.error("Error loading data:", error);
+      alert(
+        "Cannot load data. Please ensure the API server is running on http://localhost:9999"
+      );
     } finally {
       setLoading(false);
     }
@@ -59,44 +61,44 @@ const AddMovie = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
+
     const newMovie = {
       title: formData.title,
-      genre: formData.genre.split(',').map(g => g.trim()),
+      genre: formData.genre.split(",").map((g) => g.trim()),
       duration: parseInt(formData.duration),
       poster: formData.poster,
       trailer: formData.trailer,
       statusId: parseInt(formData.statusId),
       publisherId: parseInt(formData.publisherId),
-      ageRatingId: parseInt(formData.ageRatingId)
+      ageRatingId: parseInt(formData.ageRatingId),
     };
-    
+
     try {
       const response = await fetch(`${API_URL}/movies`, {
-        method: 'POST',
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json'
+          "Content-Type": "application/json",
         },
-        body: JSON.stringify(newMovie)
+        body: JSON.stringify(newMovie),
       });
 
       if (!response.ok) {
-        throw new Error('Failed to add movie');
+        throw new Error("Failed to add movie");
       }
 
-      alert('Movie added successfully!');
-      navigate('/');
+      alert("Movie added successfully!");
+      navigate("/movie-list");
     } catch (error) {
-      console.error('Error adding movie:', error);
-      alert('Failed to add movie. Please try again.');
+      console.error("Error adding movie:", error);
+      alert("Failed to add movie. Please try again.");
     }
   };
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
-      [name]: value
+      [name]: value,
     }));
   };
 
@@ -114,60 +116,75 @@ const AddMovie = () => {
     reader.onload = async (evt) => {
       try {
         const bstr = evt.target.result;
-        const wb = XLSX.read(bstr, { type: 'binary' });
+        const wb = XLSX.read(bstr, { type: "binary" });
         const wsname = wb.SheetNames[0];
         const ws = wb.Sheets[wsname];
         const data = XLSX.utils.sheet_to_json(ws);
 
-        console.log('Imported movies:', data);
-        
+        console.log("Imported movies:", data);
+
         // Validate and format data
-        const validMovies = data.filter(row => {
-          return row.title && row.duration && row.genre && 
-                 row.poster && row.trailer && 
-                 row.statusId && row.publisherId && row.ageRatingId;
-        }).map(row => ({
-          title: row.title,
-          genre: typeof row.genre === 'string' ? row.genre.split(',').map(g => g.trim()) : row.genre,
-          duration: parseInt(row.duration),
-          poster: row.poster,
-          trailer: row.trailer,
-          statusId: parseInt(row.statusId),
-          publisherId: parseInt(row.publisherId),
-          ageRatingId: parseInt(row.ageRatingId)
-        }));
+        const validMovies = data
+          .filter((row) => {
+            return (
+              row.title &&
+              row.duration &&
+              row.genre &&
+              row.poster &&
+              row.trailer &&
+              row.statusId &&
+              row.publisherId &&
+              row.ageRatingId
+            );
+          })
+          .map((row) => ({
+            title: row.title,
+            genre:
+              typeof row.genre === "string"
+                ? row.genre.split(",").map((g) => g.trim())
+                : row.genre,
+            duration: parseInt(row.duration),
+            poster: row.poster,
+            trailer: row.trailer,
+            statusId: parseInt(row.statusId),
+            publisherId: parseInt(row.publisherId),
+            ageRatingId: parseInt(row.ageRatingId),
+          }));
 
         // Import movies to API
         let successCount = 0;
         for (const movie of validMovies) {
           try {
             const response = await fetch(`${API_URL}/movies`, {
-              method: 'POST',
+              method: "POST",
               headers: {
-                'Content-Type': 'application/json'
+                "Content-Type": "application/json",
               },
-              body: JSON.stringify(movie)
+              body: JSON.stringify(movie),
             });
-            
+
             if (response.ok) {
               successCount++;
             }
           } catch (error) {
-            console.error('Error importing movie:', movie.title, error);
+            console.error("Error importing movie:", movie.title, error);
           }
         }
 
-        alert(`Successfully imported ${successCount} out of ${validMovies.length} movie(s)!`);
-        
+        alert(
+          `Successfully imported ${successCount} out of ${validMovies.length} movie(s)!`
+        );
+
         // After successful import, navigate back to list
-        setTimeout(() => navigate('/'), 1000);
-        
+        setTimeout(() => navigate("/"), 1000);
       } catch (error) {
-        console.error('Error parsing Excel file:', error);
-        alert('Error importing file. Please check the file format.\n\nExpected columns: title, genre, duration, poster, trailer, statusId, publisherId, ageRatingId');
+        console.error("Error parsing Excel file:", error);
+        alert(
+          "Error importing file. Please check the file format.\n\nExpected columns: title, genre, duration, poster, trailer, statusId, publisherId, ageRatingId"
+        );
       } finally {
         setImporting(false);
-        e.target.value = '';
+        e.target.value = "";
       }
     };
 
@@ -177,21 +194,21 @@ const AddMovie = () => {
   const downloadTemplate = () => {
     const template = [
       {
-        title: 'Example Movie',
-        genre: 'Action, Drama',
+        title: "Example Movie",
+        genre: "Action, Drama",
         duration: 120,
-        poster: 'https://example.com/poster.jpg',
-        trailer: 'https://youtu.be/xxxxx',
+        poster: "https://example.com/poster.jpg",
+        trailer: "https://youtu.be/xxxxx",
         statusId: 1,
         publisherId: 1,
-        ageRatingId: 2
-      }
+        ageRatingId: 2,
+      },
     ];
 
     const ws = XLSX.utils.json_to_sheet(template);
     const wb = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(wb, ws, 'Movies');
-    XLSX.writeFile(wb, 'movie_import_template.xlsx');
+    XLSX.utils.book_append_sheet(wb, ws, "Movies");
+    XLSX.writeFile(wb, "movie_import_template.xlsx");
   };
 
   if (loading) {
@@ -242,13 +259,13 @@ const AddMovie = () => {
                   </div>
                 </div>
               </div>
-              
+
               <input
                 type="file"
                 ref={fileInputRef}
                 onChange={handleFileUpload}
                 accept=".xlsx,.xls"
-                style={{ display: 'none' }}
+                style={{ display: "none" }}
               />
 
               <div className="card-body p-4">
@@ -271,7 +288,8 @@ const AddMovie = () => {
 
                     <div className="col-md-6">
                       <label className="form-label">
-                        Duration (minutes) <span className="text-danger">*</span>
+                        Duration (minutes){" "}
+                        <span className="text-danger">*</span>
                       </label>
                       <input
                         type="number"
@@ -299,9 +317,7 @@ const AddMovie = () => {
                       className="form-control"
                       required
                     />
-                    <div className="form-text">
-                      Separate genres with commas
-                    </div>
+                    <div className="form-text">Separate genres with commas</div>
                   </div>
 
                   <div className="row g-3 mt-1">
@@ -317,7 +333,7 @@ const AddMovie = () => {
                         required
                       >
                         <option value="">-- Select publisher --</option>
-                        {publishers.map(publisher => (
+                        {publishers.map((publisher) => (
                           <option key={publisher.id} value={publisher.id}>
                             {publisher.name} ({publisher.country})
                           </option>
@@ -337,7 +353,7 @@ const AddMovie = () => {
                         required
                       >
                         <option value="">-- Select age rating --</option>
-                        {ageRatings.map(rating => (
+                        {ageRatings.map((rating) => (
                           <option key={rating.id} value={rating.id}>
                             {rating.code} - {rating.description}
                           </option>
@@ -358,7 +374,7 @@ const AddMovie = () => {
                       required
                     >
                       <option value="">-- Select status --</option>
-                      {movieStatus.map(status => (
+                      {movieStatus.map((status) => (
                         <option key={status.id} value={status.id}>
                           {status.label}
                         </option>
@@ -404,10 +420,7 @@ const AddMovie = () => {
                     >
                       Cancel
                     </button>
-                    <button
-                      type="submit"
-                      className="btn btn-primary"
-                    >
+                    <button type="submit" className="btn btn-primary">
                       Add Movie
                     </button>
                   </div>
