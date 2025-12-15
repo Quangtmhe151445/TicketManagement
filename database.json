@@ -487,10 +487,10 @@
   ],
   "movies": [
     {
-      "title": "Your Name 2 ",
-      "genre": ["Romance", "Drama", "Bruh"],
+      "title": "Your Name",
+      "genre": ["Romance", "Drama"],
       "duration": 106,
-      "poster": "https://deviet.vn/vuong-quoc-anh/",
+      "poster": "https://upload.wikimedia.org/wikipedia/vi/thumb/b/b3/Your_Name_novel.jpg/330px-Your_Name_novel.jpg",
       "trailer": "https://youtu.be/xU47nhruN-Q",
       "statusId": 2,
       "publisherId": 3,
@@ -502,7 +502,7 @@
       "title": "Spirited Away",
       "genre": ["Fantasy", "Adventure"],
       "duration": 125,
-      "poster": "/img/spirited.jpg",
+      "poster": "https://upload.wikimedia.org/wikipedia/vi/3/30/Spirited_Away_poster.JPG",
       "trailer": "https://youtu.be/ByXuk9QqQkk",
       "statusId": 2,
       "publisherId": 1,
@@ -513,7 +513,7 @@
       "title": "The Dark Knight",
       "genre": ["Action", "Crime"],
       "duration": 152,
-      "poster": "/img/darkknight.jpg",
+      "poster": "https://upload.wikimedia.org/wikipedia/en/1/1c/The_Dark_Knight_%282008_film%29.jpg",
       "trailer": "https://youtu.be/EXeTwQWrcwY",
       "statusId": 1,
       "publisherId": 4,
@@ -524,33 +524,11 @@
       "title": "Inception",
       "genre": ["Sci-Fi", "Thriller"],
       "duration": 148,
-      "poster": "/img/inception.jpg",
+      "poster": "https://upload.wikimedia.org/wikipedia/vi/1/11/Inception_poster_1.jpg",
       "trailer": "https://youtu.be/YoHD9XEInc0",
       "statusId": 3,
       "publisherId": 4,
       "ageRatingId": 3
-    },
-    {
-      "id": "f18d",
-      "title": "Zootopia",
-      "genre": ["Romance", "Drama", "Bruh"],
-      "duration": 120,
-      "poster": "https://deviet.vn/vuong-quoc-anh/",
-      "trailer": "https://youtu.be/xU47nhruN-Q",
-      "statusId": 3,
-      "publisherId": 2,
-      "ageRatingId": 4
-    },
-    {
-      "id": "08a9",
-      "title": "fefefefe",
-      "genre": ["Romance", "Drama", "Bruh"],
-      "duration": 13123,
-      "poster": "https://deviet.vn/vuong-quoc-anh/",
-      "trailer": "https://youtu.be/xU47nhruN-Q",
-      "statusId": 1,
-      "publisherId": 1,
-      "ageRatingId": 2
     }
   ],
   "tickets": [
