@@ -41,7 +41,7 @@ function MyNav() {
                   Management
                 </Nav.Link>
 
-                <Nav.Link as={Link} to="/movies-list">
+                <Nav.Link as={Link} to="/movie-list">
                   <i className="bi bi-collection-play me-1"></i> Film Management
                 </Nav.Link>
 
