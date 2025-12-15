@@ -59,17 +59,18 @@ function Timetable({ events = [], onDelete, onEdit, staff }) {
                     }}
                   >
                     <div className="fw-bold">{event.title}</div>
-
-                    <Button
-                      variant="danger"
-                      size="sm"
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        onDelete && onDelete(event.id);
-                      }}
-                    >
-                      x
-                    </Button>
+                    {staff?.role === "admin" && (
+                      <Button
+                        variant="danger"
+                        size="sm"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          onDelete && onDelete(event.id);
+                        }}
+                      >
+                        x
+                      </Button>
+                    )}
                   </div>
                 ) : null}
               </div>

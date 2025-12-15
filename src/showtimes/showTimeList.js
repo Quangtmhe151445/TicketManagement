@@ -38,7 +38,7 @@ function ShowtimeList({ showtimes, movies, rooms, onEdit, onToggleLock, onDelete
 
     const filtered = showtimes.filter(st => {
         const movieTitle =
-            movies.find(m => m.id === st.movie_id)?.title.toLowerCase() || '';
+            movies.find(m => m.id == st.movie_id)?.title.toLowerCase() || '';
 
         const matchKeyword = movieTitle.includes(filters.keyword.toLowerCase());
         const matchRoom = !filters.roomId || String(st.room_id) === filters.roomId;
@@ -173,7 +173,7 @@ function ShowtimeList({ showtimes, movies, rooms, onEdit, onToggleLock, onDelete
                                     return (
                                         <tr key={st.id}>
                                             <td className="fw-semibold">
-                                                {movies.find(m => m.id === st.movie_id)?.title}
+                                                {movies.find(m => m.id == st.movie_id)?.title}
                                             </td>
                                             <td>
                                                 {rooms.find(r => r.id === st.room_id)?.name}

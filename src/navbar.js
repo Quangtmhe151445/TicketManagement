@@ -5,18 +5,24 @@ import Form from "react-bootstrap/Form";
 import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
 import NavDropdown from "react-bootstrap/NavDropdown";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 function MyNav() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const navigate = useNavigate();
 
   const handleAuthClick = () => {
-    setIsLoggedIn(!isLoggedIn);
-    if (isLoggedIn) {
-      alert("Logged out successfully!");
+    if (!isLoggedIn) {
+      // Giả lập logic đăng nhập, chuyển hướng đến /timetable (như trong code gốc)
+      navigate("/timetable"); 
     } else {
-      alert("Logged in successfully!");
+      // Giả lập logic đăng xuất
+      navigate("/");
+
+      alert("Logged out successfully!"); // Đổi alert cho đúng logic
     }
+
+    setIsLoggedIn(!isLoggedIn);
   };
 
   return (
@@ -30,10 +36,6 @@ function MyNav() {
 
         <Navbar.Collapse id="navbarScroll">
           <Nav className="me-auto my-2 my-lg-0" navbarScroll>
-            <Nav.Link as={Link} to="/">
-              <i className="bi bi-house-door-fill me-1"></i> Home
-            </Nav.Link>
-
             {isLoggedIn && (
               <>
                 <Nav.Link as={Link} to="/ticket">
@@ -41,33 +43,27 @@ function MyNav() {
                   Management
                 </Nav.Link>
 
-                <Nav.Link as={Link} to="/movies">
+                <Nav.Link as={Link} to="/movie-list">
                   <i className="bi bi-collection-play me-1"></i> Film Management
+                </Nav.Link>
+                
+                {/* Đã thêm link Quản lý Phòng Chiếu */}
+                <Nav.Link as={Link} to="/cinema-rooms">
+                  <i className="bi bi-display me-1"></i> Cinema Room Management
+                </Nav.Link>
+                
+                <Nav.Link as={Link} to="/showtimes">
+                  <i className="bi bi-display me-1"></i> ShowTimes Management
                 </Nav.Link>
 
                 <Nav.Link as={Link} to="/popcorn">
-                  <i className="bi bi-door-open-fill me-1"></i> PopCorn Management
+                  <i className="bi bi-door-open-fill me-1"></i> PopCorn
+                  Management
                 </Nav.Link>
 
-                <NavDropdown
-                  title="Settings & Pricing"
-                  id="navbarScrollingDropdown"
-                >
-                  <NavDropdown.Item as={Link} to="/prices">
-                    <i className="bi bi-currency-dollar me-1"></i> Price Rules
-                  </NavDropdown.Item>
-
-                  <NavDropdown.Item as={Link} to="/users">
-                    <i className="bi bi-people-fill me-1"></i> User Management
-                  </NavDropdown.Item>
-
-                  <NavDropdown.Divider />
-
-                  <NavDropdown.Item as={Link} to="/config">
-                    <i className="bi bi-gear-fill me-1"></i> System
-                    Configuration
-                  </NavDropdown.Item>
-                </NavDropdown>
+                <Nav.Link as={Link} to="/timetable">
+                  <i className="bi bi-door-open-fill me-1"></i> TimeTable
+                </Nav.Link>
               </>
             )}
           </Nav>

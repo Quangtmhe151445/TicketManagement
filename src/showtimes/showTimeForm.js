@@ -35,11 +35,18 @@ function ShowtimeForm({
     const selectedMovie = movies.find(m => m.id === movieId);
 
     const calculateEndTime = () => {
-        if (!selectedMovie || !startTime) return '';
-        const start = new Date(startTime);
-        const end = new Date(start.getTime() + selectedMovie.duration * 60000);
-        return end.toISOString().slice(0, 16);
-    };
+    if (!selectedMovie || !startTime) return '';
+    const start = new Date(startTime);
+    const end = new Date(start.getTime() + selectedMovie.duration * 60000);
+
+    const yyyy = end.getFullYear();
+    const mm = String(end.getMonth() + 1).padStart(2, '0'); 
+    const dd = String(end.getDate()).padStart(2, '0');
+    const hh = String(end.getHours()).padStart(2, '0');
+    const min = String(end.getMinutes()).padStart(2, '0');
+
+    return `${yyyy}-${mm}-${dd}T${hh}:${min}`; 
+};
 
     const hasConflict = (newStart, newEnd) => {
     if (!roomId) return false;
@@ -109,13 +116,11 @@ function ShowtimeForm({
                         disabled={!!initialData}
                     >
                         <option value="">-- Select movie --</option>
-                        {movies
-                            .filter(m => m.status === 'now_showing')
-                            .map(m => (
-                                <option key={m.id} value={m.id}>
-                                    {m.title}
-                                </option>
-                            ))}
+                        {movies.map(m => (
+                            <option key={m.id} value={m.id}>
+                                {m.title}
+                            </option>
+                        ))}
                     </Form.Select>
 
                     {selectedMovie && (

@@ -1,40 +1,112 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
+
+const API_URL = "http://localhost:9999";
 
 const EditMovie = () => {
+  const navigate = useNavigate();
+  const { id } = useParams();
+  const movieId = parseInt(id);
+
   const [formData, setFormData] = useState({
-    title: 'Your Name',
-    genre: 'Romance, Drama',
-    duration: 106,
-    poster: '/img/yourname.jpg',
-    trailer: 'https://youtu.be/xU47nhruN-Q',
-    statusId: 1,
-    publisherId: 3,
-    ageRatingId: 2
+    title: '',
+    genre: '',
+    duration: '',
+    poster: '',
+    trailer: '',
+    statusId: '',
+    publisherId: '',
+    ageRatingId: ''
   });
 
-  const publishers = [
-    { id: 1, name: "Studio Ghibli", country: "Japan" },
-    { id: 2, name: "Disney", country: "USA" },
-    { id: 3, name: "Toho", country: "Japan" },
-    { id: 4, name: "Warner Bros", country: "USA" }
-  ];
+  const [publishers, setPublishers] = useState([]);
+  const [ageRatings, setAgeRatings] = useState([]);
+  const [movieStatus, setMovieStatus] = useState([]);
+  const [loading, setLoading] = useState(true);
 
-  const ageRatings = [
-    { id: 1, code: "P", description: "Phù hợp với mọi độ tuổi" },
-    { id: 2, code: "C13", description: "Không dành cho khán giả dưới 13 tuổi" },
-    { id: 3, code: "C16", description: "Không dành cho khán giả dưới 16 tuổi" },
-    { id: 4, code: "C18", description: "Không dành cho khán giả dưới 18 tuổi" }
-  ];
+  useEffect(() => {
+    fetchData();
+  }, [movieId]);
 
-  const movieStatus = [
-    { id: 1, code: "now-showing", label: "Đang chiếu" },
-    { id: 2, code: "coming-soon", label: "Sắp chiếu" },
-    { id: 3, code: "ended", label: "Ngưng chiếu" }
-  ];
+  const fetchData = async () => {
+    try {
+      const [movieRes, publishersRes, ratingsRes, statusRes] = await Promise.all([
+        fetch(`${API_URL}/movies/${movieId}`),
+        fetch(`${API_URL}/publishers`),
+        fetch(`${API_URL}/ageRatings`),
+        fetch(`${API_URL}/movieStatus`)
+      ]);
 
-  const handleSubmit = (e) => {
+      if (!movieRes.ok || !publishersRes.ok || !ratingsRes.ok || !statusRes.ok) {
+        throw new Error('Failed to fetch data');
+      }
+
+      const [movie, publishersData, ratingsData, statusData] = await Promise.all([
+        movieRes.json(),
+        publishersRes.json(),
+        ratingsRes.json(),
+        statusRes.json()
+      ]);
+
+      setPublishers(publishersData);
+      setAgeRatings(ratingsData);
+      setMovieStatus(statusData);
+
+      if (movie) {
+        setFormData({
+          title: movie.title,
+          genre: Array.isArray(movie.genre) ? movie.genre.join(', ') : movie.genre,
+          duration: movie.duration,
+          poster: movie.poster,
+          trailer: movie.trailer,
+          statusId: movie.statusId,
+          publisherId: movie.publisherId,
+          ageRatingId: movie.ageRatingId
+        });
+      } else {
+        alert('Movie not found!');
+      }
+    } catch (error) {
+      console.error('Error loading data:', error);
+      alert('Cannot load data. Please ensure the API server is running on http://localhost:9999');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log('Form updated:', formData);
+    
+    const updatedMovie = {
+      title: formData.title,
+      genre: formData.genre.split(',').map(g => g.trim()),
+      duration: parseInt(formData.duration),
+      poster: formData.poster,
+      trailer: formData.trailer,
+      statusId: parseInt(formData.statusId),
+      publisherId: parseInt(formData.publisherId),
+      ageRatingId: parseInt(formData.ageRatingId)
+    };
+    
+    try {
+      const response = await fetch(`${API_URL}/movies/${movieId}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(updatedMovie)
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to update movie');
+      }
+
+      alert('Movie updated successfully!');
+      navigate('/movie-list');
+    } catch (error) {
+      console.error('Error updating movie:', error);
+      alert('Failed to update movie. Please try again.');
+    }
   };
 
   const handleChange = (e) => {
@@ -45,6 +117,19 @@ const EditMovie = () => {
     }));
   };
 
+  if (loading) {
+    return (
+      <div className="min-vh-100 d-flex align-items-center justify-content-center">
+        <div className="text-center">
+          <div className="spinner-border text-primary" role="status">
+            <span className="visually-hidden">Loading...</span>
+          </div>
+          <p className="mt-2">Loading data...</p>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="min-vh-100 bg-light py-4">
       <div className="container">
@@ -52,7 +137,7 @@ const EditMovie = () => {
           <div className="col-lg-8">
             <div className="card shadow-sm">
               <div className="card-header bg-success text-white">
-                <h3 className="mb-0">Chỉnh Sửa Thông Tin Phim</h3>
+                <h3 className="mb-0">Edit Movie Information</h3>
               </div>
               
               <div className="card-body p-4">
@@ -60,7 +145,7 @@ const EditMovie = () => {
                   <div className="row g-3">
                     <div className="col-md-6">
                       <label className="form-label">
-                        Tên Phim <span className="text-danger">*</span>
+                        Movie Title <span className="text-danger">*</span>
                       </label>
                       <input
                         type="text"
@@ -74,7 +159,7 @@ const EditMovie = () => {
 
                     <div className="col-md-6">
                       <label className="form-label">
-                        Thời Lượng (phút)
+                        Duration (minutes)
                       </label>
                       <input
                         type="number"
@@ -85,14 +170,14 @@ const EditMovie = () => {
                         disabled
                       />
                       <div className="form-text text-muted">
-                        Không thể chỉnh sửa
+                        Cannot be edited
                       </div>
                     </div>
                   </div>
 
                   <div className="mb-3 mt-3">
                     <label className="form-label">
-                      Thể Loại <span className="text-danger">*</span>
+                      Genre <span className="text-danger">*</span>
                     </label>
                     <input
                       type="text"
@@ -103,14 +188,14 @@ const EditMovie = () => {
                       required
                     />
                     <div className="form-text">
-                      Nhập các thể loại cách nhau bởi dấu phẩy
+                      Separate genres with commas
                     </div>
                   </div>
 
                   <div className="row g-3 mt-1">
                     <div className="col-md-6">
                       <label className="form-label">
-                        Nhà Sản Xuất
+                        Publisher
                       </label>
                       <select
                         name="publisherId"
@@ -125,13 +210,13 @@ const EditMovie = () => {
                         ))}
                       </select>
                       <div className="form-text text-muted">
-                        Không thể chỉnh sửa
+                        Cannot be edited
                       </div>
                     </div>
 
                     <div className="col-md-6">
                       <label className="form-label">
-                        Phân Loại Độ Tuổi <span className="text-danger">*</span>
+                        Age Rating <span className="text-danger">*</span>
                       </label>
                       <select
                         name="ageRatingId"
@@ -151,7 +236,7 @@ const EditMovie = () => {
 
                   <div className="mb-3 mt-3">
                     <label className="form-label">
-                      Trạng Thái <span className="text-danger">*</span>
+                      Status <span className="text-danger">*</span>
                     </label>
                     <select
                       name="statusId"
@@ -170,7 +255,7 @@ const EditMovie = () => {
 
                   <div className="mb-3">
                     <label className="form-label">
-                      URL Poster <span className="text-danger">*</span>
+                      Poster URL <span className="text-danger">*</span>
                     </label>
                     <input
                       type="url"
@@ -184,7 +269,7 @@ const EditMovie = () => {
 
                   <div className="mb-3">
                     <label className="form-label">
-                      URL Trailer <span className="text-danger">*</span>
+                      Trailer URL <span className="text-danger">*</span>
                     </label>
                     <input
                       type="url"
@@ -200,14 +285,15 @@ const EditMovie = () => {
                     <button
                       type="button"
                       className="btn btn-secondary"
+                     onClick={() => navigate(-1)}
                     >
-                      Hủy
+                      Cancel
                     </button>
                     <button
                       type="submit"
                       className="btn btn-success"
                     >
-                      Cập Nhật
+                      Update
                     </button>
                   </div>
                 </form>

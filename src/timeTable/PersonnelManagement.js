@@ -23,7 +23,7 @@ function App() {
     setEditingEvent(null);
   };
 
-  const tableName = "work schedule"; // Dùng chung 1 bảng cho tất cả
+  const tableName = "work_schedule"; // Dùng chung 1 bảng cho tất cả
 
   const fetchEvents = () => {
     if (!tableName) return;
@@ -87,10 +87,7 @@ function App() {
   return (
     <Container className="py-4" fluid>
       <div className="d-flex justify-content-between align-items-center mb-3">
-        <h2 className="text-primary">📅 Weekly work schedule ({staff.name})</h2>
-        <Button variant="outline-danger" onClick={() => setstaff(null)}>
-          Logout
-        </Button>
+        <h2 className="text-primary">📅 Weekly work_schedule ({staff.name})</h2>
       </div>
 
       <Row className="g-4">
