@@ -1,27 +1,4 @@
 {
-  "movies": [
-    {
-      "id": "mv001",
-      "title": "Dune: Part Two",
-      "duration": 166,
-      "rating": "C13",
-      "status": "now_showing"
-    },
-    {
-      "id": "mv002",
-      "title": "Oppenheimer",
-      "duration": 180,
-      "rating": "C16",
-      "status": "now_showing"
-    },
-    {
-      "id": "mv003",
-      "title": "Inside Out 2",
-      "duration": 110,
-      "rating": "P",
-      "status": "coming_soon"
-    }
-  ],
   "cinema_rooms": [
     {
       "id": "room01",
@@ -29,6 +6,29 @@
       "type": "2D Standard",
       "status": "active",
       "total_seats": 150,
+      "seat_map": [
+        [
+          "A1",
+          "A2",
+          "A3",
+          "A4",
+          "A5"
+        ],
+        [
+          "B1",
+          "B2",
+          "B3",
+          "B4",
+          "B5"
+        ],
+        [
+          "C1",
+          "C2",
+          "C3",
+          "C4",
+          "C5"
+        ]
+      ],
       "seat_types": {
         "A": "Standard",
         "B": "Standard",
@@ -41,6 +41,23 @@
       "type": "3D IMAX",
       "status": "active",
       "total_seats": 100,
+      "seat_map": [
+        [
+          "A1",
+          "A2",
+          "A3"
+        ],
+        [
+          "B1",
+          "B2",
+          "B3"
+        ],
+        [
+          "C1",
+          "C2",
+          "C3"
+        ]
+      ],
       "seat_types": {
         "A": "VIP",
         "B": "VIP",
@@ -53,6 +70,20 @@
       "type": "2D Standard",
       "status": "maintenance",
       "total_seats": 120,
+      "seat_map": [
+        [
+          "A1",
+          "A2",
+          "A3",
+          "A4"
+        ],
+        [
+          "B1",
+          "B2",
+          "B3",
+          "B4"
+        ]
+      ],
       "seat_types": {
         "A": "Standard",
         "B": "VIP"
@@ -64,6 +95,22 @@
       "type": "2D Standard",
       "status": "active",
       "total_seats": 150,
+      "seat_map": [
+        [
+          "A1",
+          "A2",
+          "A3",
+          "A4",
+          "A5"
+        ],
+        [
+          "B1",
+          "B2",
+          "B3",
+          "B4",
+          "B5"
+        ]
+      ],
       "seat_types": {
         "A": "Standard",
         "B": "Standard"
@@ -75,6 +122,22 @@
       "type": "2D Standard",
       "status": "active",
       "total_seats": 150,
+      "seat_map": [
+        [
+          "A1",
+          "A2",
+          "A3",
+          "A4",
+          "A5"
+        ],
+        [
+          "B1",
+          "B2",
+          "B3",
+          "B4",
+          "B5"
+        ]
+      ],
       "seat_types": {
         "A": "Standard",
         "B": "Standard"
@@ -86,6 +149,20 @@
       "type": "3D IMAX",
       "status": "active",
       "total_seats": 120,
+      "seat_map": [
+        [
+          "A1",
+          "A2",
+          "A3",
+          "A4"
+        ],
+        [
+          "B1",
+          "B2",
+          "B3",
+          "B4"
+        ]
+      ],
       "seat_types": {
         "A": "Standard",
         "B": "Standard"
@@ -97,6 +174,17 @@
       "type": "2D Standard",
       "status": "active",
       "total_seats": 80,
+      "seat_map": [
+        [
+          "A1",
+          "A2",
+          "A3"
+        ],
+        [
+          "B1",
+          "B2"
+        ]
+      ],
       "seat_types": {
         "A": "VIP",
         "B": "Couple"
@@ -108,6 +196,17 @@
       "type": "3D IMAX",
       "status": "active",
       "total_seats": 90,
+      "seat_map": [
+        [
+          "A1",
+          "A2",
+          "A3"
+        ],
+        [
+          "B1",
+          "B2"
+        ]
+      ],
       "seat_types": {
         "A": "VIP",
         "B": "Couple"
@@ -374,6 +473,265 @@
         "VIP"
       ],
       "status": "active"
+    }
+  ],
+  "staff": [
+    {
+      "id": "1",
+      "name": "Admin",
+      "role": "admin",
+      "username": "admin_lam",
+      "password": "admin123"
+    },
+    {
+      "id": "sf002",
+      "name": "Thi Hoa",
+      "role": "ticket_staff",
+      "username": "hoa_ticket",
+      "password": "hashed_password"
+    },
+    {
+      "id": "sf003",
+      "name": "Phuoc An",
+      "role": "checkin_staff",
+      "username": "an_checkin",
+      "password": "hashed_password"
+    }
+  ],
+  "work_schedule": [
+    {
+      "id": "1765182128544",
+      "title": "Thi Hoa",
+      "day": "Monday",
+      "time": "08:00",
+      "endTime": "09:00",
+      "week": "2025-12-08"
+    },
+    {
+      "id": "1765182187868",
+      "title": "Thi Hoa",
+      "day": "Friday",
+      "time": "08:00",
+      "endTime": "09:00",
+      "week": "2025-12-08"
+    },
+    {
+      "id": "1765203166016",
+      "title": "Phuoc An",
+      "day": "Monday",
+      "time": "13:00",
+      "endTime": "14:00",
+      "week": "2025-12-08"
+    },
+    {
+      "id": "1765203293402",
+      "title": "Thi Hoa",
+      "day": "Thursday",
+      "time": "08:00",
+      "endTime": "09:00",
+      "week": "2025-12-08"
+    },
+    {
+      "id": "1765348770395",
+      "title": "Phuoc An",
+      "day": "Tuesday",
+      "time": "08:00",
+      "endTime": "09:00",
+      "week": "2025-12-08"
+    },
+    {
+      "id": "1765566643113",
+      "title": "Thi Hoa",
+      "day": "Sunday",
+      "time": "08:00",
+      "endTime": "09:00",
+      "week": "2025-12-08"
+    },
+    {
+      "id": "1765566650068",
+      "title": "Thi Hoa",
+      "day": "Wednesday",
+      "time": "08:00",
+      "endTime": "09:00",
+      "week": "2025-12-22"
+    },
+    {
+      "id": "1765807686240",
+      "title": "Thi Hoa",
+      "day": "Monday",
+      "time": "08:00",
+      "endTime": "09:00",
+      "week": "2025-12-08"
+    }
+  ],
+  "publishers": [
+    {
+      "id": "1",
+      "name": "Studio Ghibli",
+      "country": "Japan"
+    },
+    {
+      "id": "2",
+      "name": "Disney",
+      "country": "USA"
+    },
+    {
+      "id": "3",
+      "name": "Toho",
+      "country": "Japan"
+    },
+    {
+      "id": "4",
+      "name": "Warner Bros",
+      "country": "USA"
+    }
+  ],
+  "ageRatings": [
+    {
+      "id": "1",
+      "code": "P",
+      "description": "Phù hợp với mọi độ tuổi"
+    },
+    {
+      "id": "2",
+      "code": "C13",
+      "description": "Không dành cho khán giả dưới 13 tuổi"
+    },
+    {
+      "id": "3",
+      "code": "C16",
+      "description": "Không dành cho khán giả dưới 16 tuổi"
+    },
+    {
+      "id": "4",
+      "code": "C18",
+      "description": "Không dành cho khán giả dưới 18 tuổi"
+    }
+  ],
+  "movieStatus": [
+    {
+      "id": "1",
+      "code": "now-showing",
+      "label": "Đang chiếu"
+    },
+    {
+      "id": "2",
+      "code": "coming-soon",
+      "label": "Sắp chiếu"
+    },
+    {
+      "id": "3",
+      "code": "ended",
+      "label": "Ngưng chiếu"
+    }
+  ],
+  "movies": [
+    {
+      "title": "Your Name 2 ",
+      "genre": [
+        "Romance",
+        "Drama",
+        "Bruh"
+      ],
+      "duration": 106,
+      "poster": "https://deviet.vn/vuong-quoc-anh/",
+      "trailer": "https://youtu.be/xU47nhruN-Q",
+      "statusId": 2,
+      "publisherId": 3,
+      "ageRatingId": 1,
+      "id": "1"
+    },
+    {
+      "id": "2",
+      "title": "Spirited Away",
+      "genre": [
+        "Fantasy",
+        "Adventure"
+      ],
+      "duration": 125,
+      "poster": "/img/spirited.jpg",
+      "trailer": "https://youtu.be/ByXuk9QqQkk",
+      "statusId": 2,
+      "publisherId": 1,
+      "ageRatingId": 1
+    },
+    {
+      "id": "3",
+      "title": "The Dark Knight",
+      "genre": [
+        "Action",
+        "Crime"
+      ],
+      "duration": 152,
+      "poster": "/img/darkknight.jpg",
+      "trailer": "https://youtu.be/EXeTwQWrcwY",
+      "statusId": 1,
+      "publisherId": 4,
+      "ageRatingId": 3
+    },
+    {
+      "id": "4",
+      "title": "Inception",
+      "genre": [
+        "Sci-Fi",
+        "Thriller"
+      ],
+      "duration": 148,
+      "poster": "/img/inception.jpg",
+      "trailer": "https://youtu.be/YoHD9XEInc0",
+      "statusId": 3,
+      "publisherId": 4,
+      "ageRatingId": 3
+    },
+    {
+      "id": "f18d",
+      "title": "Zootopia",
+      "genre": [
+        "Romance",
+        "Drama",
+        "Bruh"
+      ],
+      "duration": 120,
+      "poster": "https://deviet.vn/vuong-quoc-anh/",
+      "trailer": "https://youtu.be/xU47nhruN-Q",
+      "statusId": 3,
+      "publisherId": 2,
+      "ageRatingId": 4
+    },
+    {
+      "id": "08a9",
+      "title": "fefefefe",
+      "genre": [
+        "Romance",
+        "Drama",
+        "Bruh"
+      ],
+      "duration": 13123,
+      "poster": "https://deviet.vn/vuong-quoc-anh/",
+      "trailer": "https://youtu.be/xU47nhruN-Q",
+      "statusId": 1,
+      "publisherId": 1,
+      "ageRatingId": 2
+    }
+  ],
+  "tickets": [
+    {
+      "id": "tk001",
+      "showtime_id": "st001",
+      "seat": "A3",
+      "price": 120000,
+      "status": "sold",
+      "customer_name": "Tran Minh",
+      "buy_method": "counter"
+    },
+    {
+      "id": "tk002",
+      "showtime_id": "st001",
+      "seat": "B1",
+      "price": 100000,
+      "status": "canceled",
+      "customer_name": "Nguyen Van A",
+      "buy_method": "counter"
     }
   ]
 }
