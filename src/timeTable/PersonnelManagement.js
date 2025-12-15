@@ -23,7 +23,7 @@ function App() {
     setEditingEvent(null);
   };
 
-  const tableName = "work schedule"; // Dùng chung 1 bảng cho tất cả
+  const tableName = "work schedule";
 
   const fetchEvents = () => {
     if (!tableName) return;
