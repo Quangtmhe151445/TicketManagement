@@ -13,11 +13,13 @@ function MyNav() {
 
   const handleAuthClick = () => {
     if (!isLoggedIn) {
-      navigate("/timetable");
+      // Giả lập logic đăng nhập, chuyển hướng đến /timetable (như trong code gốc)
+      navigate("/timetable"); 
     } else {
+      // Giả lập logic đăng xuất
       navigate("/");
 
-      alert("Logged in successfully!");
+      alert("Logged out successfully!"); // Đổi alert cho đúng logic
     }
 
     setIsLoggedIn(!isLoggedIn);
@@ -34,8 +36,6 @@ function MyNav() {
 
         <Navbar.Collapse id="navbarScroll">
           <Nav className="me-auto my-2 my-lg-0" navbarScroll>
-
-
             {isLoggedIn && (
               <>
                 <Nav.Link as={Link} to="/ticket">
@@ -46,7 +46,12 @@ function MyNav() {
                 <Nav.Link as={Link} to="/movie-list">
                   <i className="bi bi-collection-play me-1"></i> Film Management
                 </Nav.Link>
-
+                
+                {/* Đã thêm link Quản lý Phòng Chiếu */}
+                <Nav.Link as={Link} to="/cinema-rooms">
+                  <i className="bi bi-display me-1"></i> Cinema Room Management
+                </Nav.Link>
+                
                 <Nav.Link as={Link} to="/popcorn">
                   <i className="bi bi-door-open-fill me-1"></i> PopCorn
                   Management
@@ -59,7 +64,6 @@ function MyNav() {
             )}
           </Nav>
 
-          {/* Nút Login/Logout */}
           <Nav>
             <Nav.Link onClick={handleAuthClick}>
               {isLoggedIn ? (
