@@ -602,7 +602,7 @@
       "room_id": "room02",
       "start_time": "2025-12-15T10:00:00",
       "end_time": "2025-12-15T12:46:00",
-      "status": "open",
+      "status": "locked",
       "tickets_sold": 25
     },
     {
@@ -1072,6 +1072,19 @@
       "statusId": 3,
       "publisherId": 4,
       "ageRatingId": 3
+    },
+    {
+      "id": "4a33",
+      "title": "hello",
+      "genre": [
+        "Action"
+      ],
+      "duration": 120,
+      "poster": "https://th.bing.com/th/id/R.f3daece4d91f95eef7de15d4bdd73c62?rik=Ga6fK2sX2mZYXw&riu=http%3a%2f%2fwww.melaniecooks.com%2fwp-content%2fuploads%2f2018%2f02%2fcaramel_popcorn_recipe.jpg&ehk=NWQhVIJ%2b1EUKQ4Y%2fY9TPw4ac%2bdra8227ozCg3aIGX2Q%3d&risl=&pid=ImgRaw&r=0",
+      "trailer": "https://youtu.be/xU47nhruN-Q",
+      "statusId": 1,
+      "publisherId": 2,
+      "ageRatingId": 1
     }
   ],
   "tickets": [
