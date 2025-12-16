@@ -8,18 +8,19 @@ const Login = ({ onLogin }) => {
   const handleLogin = (e) => {
     e.preventDefault();
 
+    // 👉 Validate password length
+    if (password.length < 8) {
+      alert("Password must be at least 8 characters");
+      return;
+    }
+
     fetch(
       `http://localhost:9999/staff?username=${username}&password=${password}`
     )
       .then((res) => res.json())
       .then((users) => {
-        console.log("Users từ server:", users);
-
         if (users.length > 0) {
-          const user = users[0]; // Đây là user đăng nhập
-          console.log("Role:", user.role);
-
-          // Gửi user đầy đủ (bao gồm role) sang App
+          const user = users[0];
           onLogin({
             id: user.id,
             name: user.name,
@@ -31,10 +32,7 @@ const Login = ({ onLogin }) => {
           alert("Invalid username or password");
         }
       })
-      .catch((err) => {
-        console.error("Lỗi fetch:", err);
-        alert("Server error");
-      });
+      .catch(() => alert("Server error"));
   };
 
   return (
