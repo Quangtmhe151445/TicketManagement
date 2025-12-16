@@ -14,7 +14,6 @@ import CreateTicketPage from "./TicketManager/CreateTicketPage.js";
 import Timetable from "./timeTable/PersonnelManagement.js";
 import Home from "./Home.js";
 
-
 function App() {
   return (
     <Router>

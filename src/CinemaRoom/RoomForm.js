@@ -2,14 +2,21 @@ import React, { useState, useEffect } from 'react';
 import { Form, Button, Row, Col, Card } from 'react-bootstrap';
 import PropTypes from 'prop-types';
 
+const roomNameOptions = [
+    ...Array.from({ length: 10 }, (_, i) => `Room ${i + 1}`),
+    'Room VIP',
+    'Room VIP Plus',
+    'Room VIP Max',
+];
+
 const defaultRoomData = {
-    name: '',
-    type: '2D Standard', 
-    status: 'active', 
-    total_rows: 10, 
+    name: roomNameOptions[0], 
+    type: '2D Standard',
+    status: 'active',
+    total_rows: 10,
     seats_per_row: 15,
-    vip_rows: '', 
-    couple_rows: '', 
+    vip_rows: '',
+    couple_rows: '',
 };
 
 function RoomForm({ room, onSave, onCancel }) {
@@ -21,7 +28,7 @@ function RoomForm({ room, onSave, onCancel }) {
             const seatTypes = room.seat_types || {};
             const vipRows = [];
             const coupleRows = [];
-            
+
             Object.keys(seatTypes).forEach(rowLetter => {
                 if (seatTypes[rowLetter] === 'VIP') {
                     vipRows.push(rowLetter);
@@ -31,17 +38,20 @@ function RoomForm({ room, onSave, onCancel }) {
             });
 
             const totalRows = room.seat_map ? room.seat_map.length : 0;
-            const seatsPerRow = (room.seat_map && room.seat_map.length > 0) 
-                                ? room.seat_map[0].length 
+            const seatsPerRow = (room.seat_map && room.seat_map.length > 0)
+                                ? room.seat_map[0].length
                                 : 0;
-            
+
+            const initialRoomName = roomNameOptions.includes(room.name) ? room.name : room.name || defaultRoomData.name;
+
             setFormData({
                 ...defaultRoomData,
-                ...room, 
+                ...room,
+                name: initialRoomName,
                 total_rows: totalRows,
                 seats_per_row: seatsPerRow,
-                vip_rows: vipRows.join(', '), 
-                couple_rows: coupleRows.join(', '), 
+                vip_rows: vipRows.join(', '),
+                couple_rows: coupleRows.join(', '),
             });
         } else {
             setFormData(defaultRoomData);
@@ -69,15 +79,18 @@ function RoomForm({ room, onSave, onCancel }) {
             <Row className="mb-3">
                 <Form.Group as={Col} md="6" controlId="roomName">
                     <Form.Label>Cinema Room Name</Form.Label>
-                    <Form.Control
+                    <Form.Select
                         required
-                        type="text"
-                        placeholder="Ex: Room 01"
                         name="name"
                         value={formData.name}
                         onChange={handleChange}
-                    />
-                    <Form.Control.Feedback type="invalid">Please enter the room name.</Form.Control.Feedback>
+                    >
+                        {/* Render các tùy chọn tên phòng */}
+                        {roomNameOptions.map(name => (
+                            <option key={name} value={name}>{name}</option>
+                        ))}
+                    </Form.Select>
+                    <Form.Control.Feedback type="invalid">Please select the room name.</Form.Control.Feedback>
                 </Form.Group>
 
                 <Form.Group as={Col} md="3" controlId="roomType">
@@ -103,30 +116,30 @@ function RoomForm({ room, onSave, onCancel }) {
                 <Card.Title>Seat Configuration</Card.Title>
                 <Row>
                     <Form.Group as={Col} md="3" controlId="totalRows" className="mb-3">
-                        <Form.Label>Total Number of Rows (Max 26)</Form.Label> 
-                        <Form.Control 
-                            type="number" 
-                            name="total_rows" 
-                            min="1" 
-                            max="26" 
-                            value={formData.total_rows} 
-                            onChange={handleChange} 
-                            required 
+                        <Form.Label>Total Number of Rows (Max 26)</Form.Label>
+                        <Form.Control
+                            type="number"
+                            name="total_rows"
+                            min="1"
+                            max="26"
+                            value={formData.total_rows}
+                            onChange={handleChange}
+                            required
                         />
-                        <Form.Control.Feedback type="invalid">Please enter the total number of rows (1-26).</Form.Control.Feedback> {/* Cập nhật feedback */}
+                        <Form.Control.Feedback type="invalid">Please enter the total number of rows (1-26).</Form.Control.Feedback>
                     </Form.Group>
                     <Form.Group as={Col} md="3" controlId="seatsPerRow" className="mb-3">
-                        <Form.Label>Seats Per Row (Max 30)</Form.Label> 
-                        <Form.Control 
-                            type="number" 
-                            name="seats_per_row" 
-                            min="1" 
-                            max="30" 
-                            value={formData.seats_per_row} 
-                            onChange={handleChange} 
-                            required 
+                        <Form.Label>Seats Per Row (Max 30)</Form.Label>
+                        <Form.Control
+                            type="number"
+                            name="seats_per_row"
+                            min="1"
+                            max="30"
+                            value={formData.seats_per_row}
+                            onChange={handleChange}
+                            required
                         />
-                        <Form.Control.Feedback type="invalid">Please enter the number of seats per row (1-30).</Form.Control.Feedback> 
+                        <Form.Control.Feedback type="invalid">Please enter the number of seats per row (1-30).</Form.Control.Feedback>
                     </Form.Group>
                     <Form.Group as={Col} md="3" controlId="vipRows" className="mb-3">
                         <Form.Label>VIP Rows (Ex: B,C)</Form.Label>
@@ -147,7 +160,7 @@ function RoomForm({ room, onSave, onCancel }) {
     );
 }
 
-RoomForm.propTypes = { 
+RoomForm.propTypes = {
     room: PropTypes.object,
     onSave: PropTypes.func.isRequired,
     onCancel: PropTypes.func.isRequired,
