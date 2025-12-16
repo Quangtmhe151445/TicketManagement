@@ -1,7 +1,25 @@
-// src/CinemaRoom/RoomList.js
 import React from 'react';
 import { Table, Button, Badge, Alert } from 'react-bootstrap';
 import PropTypes from 'prop-types';
+
+const formatSeatTypes = (seatTypes) => {
+    if (!seatTypes || Object.keys(seatTypes).length === 0) {
+        return 'Standard (Unknown)'; 
+    }
+
+    const groups = {};
+    Object.keys(seatTypes).forEach(rowLetter => {
+        const type = seatTypes[rowLetter];
+        if (!groups[type]) {
+            groups[type] = [];
+        }
+        groups[type].push(rowLetter);
+    });
+
+    return Object.keys(groups).map(type => {
+        return `${type}: ${groups[type].sort().join(', ')}`;
+    }).join('; ');
+};
 
 function RoomList({ rooms, onEdit, onDelete }) {
     const getStatusVariant = (status) => {
@@ -10,17 +28,17 @@ function RoomList({ rooms, onEdit, onDelete }) {
 
     return (
         <div className="table-responsive">
-            <h4 className="mb-3 text-secondary">Danh Sách Phòng Chiếu Hiện Có</h4>
+            <h4 className="mb-3 text-secondary">List of Existing Cinema Rooms</h4> 
             <Table striped bordered hover className="mt-3 align-middle">
                 <thead className="table-dark">
                     <tr>
                         <th>#</th>
-                        <th>Tên Phòng</th>
-                        <th>Loại Phòng</th>
-                        <th>Tình Trạng</th>
-                        <th>Tổng Số Ghế</th>
-                        <th>Sơ Đồ Ghế (Loại Ghế)</th>
-                        <th>Hành Động</th>
+                        <th>Room Name</th> 
+                        <th>Room Type</th> 
+                        <th>Status</th> 
+                        <th>Total Seats</th> 
+                        <th>Seat Configuration</th> 
+                        <th>Actions</th> 
                     </tr>
                 </thead>
                 <tbody>
@@ -31,20 +49,20 @@ function RoomList({ rooms, onEdit, onDelete }) {
                             <td>**{room.type}**</td>
                             <td>
                                 <Badge pill bg={getStatusVariant(room.status)}>
-                                    {room.status === 'active' ? 'Đang Sử Dụng' : 'Bảo Trì'}
+                                    {room.status === 'active' ? 'Active' : 'Maintenance'} 
                                 </Badge>
                             </td>
                             <td>{room.total_seats}</td>
-                            <td>{room.seat_types || 'N/A'}</td>
+                            <td>{formatSeatTypes(room.seat_types)}</td>
                             <td>
-                                <Button variant="primary" size="sm" onClick={() => onEdit(room)} className="me-2">Sửa</Button>
-                                <Button variant="danger" size="sm" onClick={() => onDelete(room.id)}>Xóa</Button>
+                                <Button variant="primary" size="sm" onClick={() => onEdit(room)} className="me-2">Edit</Button> 
+                                <Button variant="danger" size="sm" onClick={() => onDelete(room.id)}>Delete</Button> 
                             </td>
                         </tr>
                     ))}
                 </tbody>
             </Table>
-            {rooms.length === 0 && <Alert variant="info" className="text-center">Chưa có phòng chiếu nào được tạo.</Alert>}
+            {rooms.length === 0 && <Alert variant="info" className="text-center">No cinema rooms have been created yet.</Alert>} 
         </div>
     );
 }

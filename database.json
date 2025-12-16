@@ -39,7 +39,6 @@
       "name": "Room 05",
       "type": "2D Standard",
       "status": "maintenance",
-      "total_seats": 120,
       "seat_map": [
         ["A1", "A2", "A3", "A4"],
         ["B1", "B2", "B3", "B4"]
@@ -47,7 +46,8 @@
       "seat_types": {
         "A": "Standard",
         "B": "VIP"
-      }
+      },
+      "total_seats": 8
     },
     {
       "id": "room04",
@@ -123,12 +123,394 @@
         "A": "VIP",
         "B": "Couple"
       }
+    },
+    {
+      "id": "room_1765813598908",
+      "name": "Room 11",
+      "type": "2D Standard",
+      "status": "active",
+      "seat_map": [
+        [
+          "A1",
+          "A2",
+          "A3",
+          "A4",
+          "A5",
+          "A6",
+          "A7",
+          "A8",
+          "A9",
+          "A10",
+          "A11",
+          "A12",
+          "A13",
+          "A14",
+          "A15"
+        ],
+        [
+          "B1",
+          "B2",
+          "B3",
+          "B4",
+          "B5",
+          "B6",
+          "B7",
+          "B8",
+          "B9",
+          "B10",
+          "B11",
+          "B12",
+          "B13",
+          "B14",
+          "B15"
+        ],
+        [
+          "C1",
+          "C2",
+          "C3",
+          "C4",
+          "C5",
+          "C6",
+          "C7",
+          "C8",
+          "C9",
+          "C10",
+          "C11",
+          "C12",
+          "C13",
+          "C14",
+          "C15"
+        ],
+        [
+          "D1",
+          "D2",
+          "D3",
+          "D4",
+          "D5",
+          "D6",
+          "D7",
+          "D8",
+          "D9",
+          "D10",
+          "D11",
+          "D12",
+          "D13",
+          "D14",
+          "D15"
+        ],
+        [
+          "E1",
+          "E2",
+          "E3",
+          "E4",
+          "E5",
+          "E6",
+          "E7",
+          "E8",
+          "E9",
+          "E10",
+          "E11",
+          "E12",
+          "E13",
+          "E14",
+          "E15"
+        ],
+        [
+          "F1",
+          "F2",
+          "F3",
+          "F4",
+          "F5",
+          "F6",
+          "F7",
+          "F8",
+          "F9",
+          "F10",
+          "F11",
+          "F12",
+          "F13",
+          "F14",
+          "F15"
+        ],
+        [
+          "G1",
+          "G2",
+          "G3",
+          "G4",
+          "G5",
+          "G6",
+          "G7",
+          "G8",
+          "G9",
+          "G10",
+          "G11",
+          "G12",
+          "G13",
+          "G14",
+          "G15"
+        ],
+        [
+          "H1",
+          "H2",
+          "H3",
+          "H4",
+          "H5",
+          "H6",
+          "H7",
+          "H8",
+          "H9",
+          "H10",
+          "H11",
+          "H12",
+          "H13",
+          "H14",
+          "H15"
+        ],
+        [
+          "I1",
+          "I2",
+          "I3",
+          "I4",
+          "I5",
+          "I6",
+          "I7",
+          "I8",
+          "I9",
+          "I10",
+          "I11",
+          "I12",
+          "I13",
+          "I14",
+          "I15"
+        ],
+        [
+          "J1",
+          "J2",
+          "J3",
+          "J4",
+          "J5",
+          "J6",
+          "J7",
+          "J8",
+          "J9",
+          "J10",
+          "J11",
+          "J12",
+          "J13",
+          "J14",
+          "J15"
+        ]
+      ],
+      "seat_types": {
+        "A": "Standard",
+        "B": "Standard",
+        "C": "Standard",
+        "D": "Standard",
+        "E": "Standard",
+        "F": "Standard",
+        "G": "Standard",
+        "H": "Standard",
+        "I": "Standard",
+        "J": "Standard"
+      },
+      "total_seats": 150
+    },
+    {
+      "id": "room_1765816098077",
+      "name": "Room 01",
+      "type": "2D Standard",
+      "status": "active",
+      "seat_map": [
+        [
+          "A1",
+          "A2",
+          "A3",
+          "A4",
+          "A5",
+          "A6",
+          "A7",
+          "A8",
+          "A9",
+          "A10",
+          "A11",
+          "A12",
+          "A13",
+          "A14",
+          "A15"
+        ],
+        [
+          "B1",
+          "B2",
+          "B3",
+          "B4",
+          "B5",
+          "B6",
+          "B7",
+          "B8",
+          "B9",
+          "B10",
+          "B11",
+          "B12",
+          "B13",
+          "B14",
+          "B15"
+        ],
+        [
+          "C1",
+          "C2",
+          "C3",
+          "C4",
+          "C5",
+          "C6",
+          "C7",
+          "C8",
+          "C9",
+          "C10",
+          "C11",
+          "C12",
+          "C13",
+          "C14",
+          "C15"
+        ],
+        [
+          "D1",
+          "D2",
+          "D3",
+          "D4",
+          "D5",
+          "D6",
+          "D7",
+          "D8",
+          "D9",
+          "D10",
+          "D11",
+          "D12",
+          "D13",
+          "D14",
+          "D15"
+        ],
+        [
+          "E1",
+          "E2",
+          "E3",
+          "E4",
+          "E5",
+          "E6",
+          "E7",
+          "E8",
+          "E9",
+          "E10",
+          "E11",
+          "E12",
+          "E13",
+          "E14",
+          "E15"
+        ],
+        [
+          "F1",
+          "F2",
+          "F3",
+          "F4",
+          "F5",
+          "F6",
+          "F7",
+          "F8",
+          "F9",
+          "F10",
+          "F11",
+          "F12",
+          "F13",
+          "F14",
+          "F15"
+        ],
+        [
+          "G1",
+          "G2",
+          "G3",
+          "G4",
+          "G5",
+          "G6",
+          "G7",
+          "G8",
+          "G9",
+          "G10",
+          "G11",
+          "G12",
+          "G13",
+          "G14",
+          "G15"
+        ],
+        [
+          "H1",
+          "H2",
+          "H3",
+          "H4",
+          "H5",
+          "H6",
+          "H7",
+          "H8",
+          "H9",
+          "H10",
+          "H11",
+          "H12",
+          "H13",
+          "H14",
+          "H15"
+        ],
+        [
+          "I1",
+          "I2",
+          "I3",
+          "I4",
+          "I5",
+          "I6",
+          "I7",
+          "I8",
+          "I9",
+          "I10",
+          "I11",
+          "I12",
+          "I13",
+          "I14",
+          "I15"
+        ],
+        [
+          "J1",
+          "J2",
+          "J3",
+          "J4",
+          "J5",
+          "J6",
+          "J7",
+          "J8",
+          "J9",
+          "J10",
+          "J11",
+          "J12",
+          "J13",
+          "J14",
+          "J15"
+        ]
+      ],
+      "seat_types": {
+        "A": "Standard",
+        "B": "Standard",
+        "C": "Standard",
+        "D": "Standard",
+        "E": "Standard",
+        "F": "Standard",
+        "G": "Standard",
+        "H": "Standard",
+        "I": "Standard",
+        "J": "Standard"
+      },
+      "total_seats": 150
     }
   ],
   "showtimes": [
     {
       "id": "st001",
-      "movie_id": "mv002",
+      "movie_id": "4",
       "room_id": "room02",
       "start_time": "2025-12-15T10:00:00",
       "end_time": "2025-12-15T12:46:00",
@@ -137,7 +519,7 @@
     },
     {
       "id": "st002",
-      "movie_id": "mv002",
+      "movie_id": "3",
       "room_id": "room07",
       "start_time": "2025-12-15T13:00:00",
       "end_time": "2025-12-15T16:00:00",
@@ -146,7 +528,7 @@
     },
     {
       "id": "st003",
-      "movie_id": "mv001",
+      "movie_id": "2",
       "room_id": "room01",
       "start_time": "2025-12-15T15:00:00",
       "end_time": "2025-12-15T17:46:00",
@@ -155,12 +537,21 @@
     },
     {
       "id": "st004",
-      "movie_id": "mv002",
+      "movie_id": "1",
       "room_id": "room03",
       "start_time": "2025-12-15T18:00:00",
       "end_time": "2025-12-15T21:00:00",
       "status": "open",
       "tickets_sold": 100
+    },
+    {
+      "id": "5de3",
+      "movie_id": "1",
+      "room_id": "room01",
+      "start_time": "2025-12-17T15:24:00.000Z",
+      "end_time": "2025-12-17T10:10:00.000Z",
+      "status": "open",
+      "tickets_sold": 0
     }
   ],
   "price_rules": [
@@ -450,47 +841,47 @@
     {
       "id": "1",
       "code": "P",
-      "description": "Phù hợp với mọi độ tuổi"
+      "description": "Suitable for all ages"
     },
     {
       "id": "2",
       "code": "C13",
-      "description": "Không dành cho khán giả dưới 13 tuổi"
+      "description": "Not suitable for audiences under 13 years old"
     },
     {
       "id": "3",
       "code": "C16",
-      "description": "Không dành cho khán giả dưới 16 tuổi"
+      "description": "Not suitable for audiences under 16 years old"
     },
     {
       "id": "4",
       "code": "C18",
-      "description": "Không dành cho khán giả dưới 18 tuổi"
+      "description": "Not suitable for audiences under 18 years old"
     }
   ],
   "movieStatus": [
     {
       "id": "1",
       "code": "now-showing",
-      "label": "Đang chiếu"
+      "label": "Now Showing"
     },
     {
       "id": "2",
       "code": "coming-soon",
-      "label": "Sắp chiếu"
+      "label": "Coming Soon"
     },
     {
       "id": "3",
       "code": "ended",
-      "label": "Ngưng chiếu"
+      "label": "No Longer Showing"
     }
   ],
   "movies": [
     {
-      "title": "Your Name 2 ",
-      "genre": ["Romance", "Drama", "Bruh"],
+      "title": "Your Name",
+      "genre": ["Romance", "Drama"],
       "duration": 106,
-      "poster": "https://deviet.vn/vuong-quoc-anh/",
+      "poster": "https://upload.wikimedia.org/wikipedia/vi/thumb/b/b3/Your_Name_novel.jpg/330px-Your_Name_novel.jpg",
       "trailer": "https://youtu.be/xU47nhruN-Q",
       "statusId": 2,
       "publisherId": 3,
@@ -502,7 +893,7 @@
       "title": "Spirited Away",
       "genre": ["Fantasy", "Adventure"],
       "duration": 125,
-      "poster": "/img/spirited.jpg",
+      "poster": "https://upload.wikimedia.org/wikipedia/vi/3/30/Spirited_Away_poster.JPG",
       "trailer": "https://youtu.be/ByXuk9QqQkk",
       "statusId": 2,
       "publisherId": 1,
@@ -513,7 +904,7 @@
       "title": "The Dark Knight",
       "genre": ["Action", "Crime"],
       "duration": 152,
-      "poster": "/img/darkknight.jpg",
+      "poster": "https://upload.wikimedia.org/wikipedia/en/1/1c/The_Dark_Knight_%282008_film%29.jpg",
       "trailer": "https://youtu.be/EXeTwQWrcwY",
       "statusId": 1,
       "publisherId": 4,
@@ -524,33 +915,11 @@
       "title": "Inception",
       "genre": ["Sci-Fi", "Thriller"],
       "duration": 148,
-      "poster": "/img/inception.jpg",
+      "poster": "https://upload.wikimedia.org/wikipedia/vi/1/11/Inception_poster_1.jpg",
       "trailer": "https://youtu.be/YoHD9XEInc0",
       "statusId": 3,
       "publisherId": 4,
       "ageRatingId": 3
-    },
-    {
-      "id": "f18d",
-      "title": "Zootopia",
-      "genre": ["Romance", "Drama", "Bruh"],
-      "duration": 120,
-      "poster": "https://deviet.vn/vuong-quoc-anh/",
-      "trailer": "https://youtu.be/xU47nhruN-Q",
-      "statusId": 3,
-      "publisherId": 2,
-      "ageRatingId": 4
-    },
-    {
-      "id": "08a9",
-      "title": "fefefefe",
-      "genre": ["Romance", "Drama", "Bruh"],
-      "duration": 13123,
-      "poster": "https://deviet.vn/vuong-quoc-anh/",
-      "trailer": "https://youtu.be/xU47nhruN-Q",
-      "statusId": 1,
-      "publisherId": 1,
-      "ageRatingId": 2
     }
   ],
   "tickets": [
