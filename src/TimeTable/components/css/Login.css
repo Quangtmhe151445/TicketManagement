@@ -1,0 +1,10 @@
+.login-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(248, 249, 250, 0.98);
+  z-index: 2000; /* cao hơn Navbar bootstrap */
+}
+
+.login-overlay .card {
+  transform: translateY(-80px); /* 👈 đẩy lên */
+}
