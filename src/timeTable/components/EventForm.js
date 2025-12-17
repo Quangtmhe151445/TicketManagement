@@ -47,6 +47,10 @@ const EventForm = ({
     };
 
     if (editingEvent) {
+      console.log(event.time)
+      if (event.title == title && event.time == time) {
+        alert("Trùng ca làm việc");
+      }
       updateEvent(event);
     } else {
       addEvent(event); // Không thêm participants và ratings nữa

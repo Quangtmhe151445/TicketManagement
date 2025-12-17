@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { Button, Form, Card, Container, Spinner } from "react-bootstrap";
-import "./css/Login.css"; // Cleaned up import
 
 const Login = ({ onLogin }) => {
   const [username, setUsername] = useState("");
@@ -18,7 +17,6 @@ const Login = ({ onLogin }) => {
     setIsLoading(true);
 
     try {
-      // Note: Ideally, this should be a POST request to a /login endpoint
       const response = await fetch(
         `http://localhost:9999/staff?username=${username}&password=${password}`
       );

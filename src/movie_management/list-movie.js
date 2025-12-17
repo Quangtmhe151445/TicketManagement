@@ -1,6 +1,17 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { Card, Button, Row, Col, Form, Badge } from "react-bootstrap";
+import { 
+  Card, 
+  Button, 
+  Row, 
+  Col, 
+  Form, 
+  Badge, 
+  Table, 
+  Spinner, 
+  Container,
+  Pagination 
+} from "react-bootstrap";
 
 const API_URL = "http://localhost:9999";
 
@@ -13,6 +24,10 @@ const ListMovie = () => {
   const [ageRatings, setAgeRatings] = useState([]);
   const [loading, setLoading] = useState(true);
 
+  // --- State cho phân trang ---
+  const [currentPage, setCurrentPage] = useState(1);
+  const moviesPerPage = 5;
+
   useEffect(() => {
     fetchData();
   }, []);
@@ -24,212 +39,132 @@ const ListMovie = () => {
         fetch(`${API_URL}/movieStatus`),
         fetch(`${API_URL}/ageRatings`)
       ]);
-
-      if (!moviesRes.ok || !statusRes.ok || !ratingsRes.ok) {
-        throw new Error('Failed to fetch data');
-      }
-
       const [moviesData, statusData, ratingsData] = await Promise.all([
         moviesRes.json(),
         statusRes.json(),
         ratingsRes.json()
       ]);
-
       setMovies(moviesData);
       setMovieStatus(statusData);
       setAgeRatings(ratingsData);
     } catch (error) {
-      console.error('Error loading data:', error);
-      alert('Cannot load data. Please ensure the API server is running on http://localhost:9999');
+      console.error('Error:', error);
     } finally {
       setLoading(false);
     }
   };
 
-  const getStatusLabel = (statusId) => {
-    return movieStatus.find((s) => s.id === statusId)?.label || "";
-  };
-
-  const getStatusBadge = (statusId) => {
-    switch (statusId) {
-      case 1:
-        return "success";
-      case 2:
-        return "primary";
-      case 3:
-        return "secondary";
-      default:
-        return "secondary";
-    }
-  };
-
-  const getAgeRatingCode = (ageRatingId) => {
-    return ageRatings.find((r) => r.id === ageRatingId)?.code || "";
-  };
-
+  // Logic lọc dữ liệu
   const filteredMovies = movies.filter((movie) => {
     const matchName = movie.title.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchStatus =
-      statusFilter === "" || movie.statusId === parseInt(statusFilter);
+    const matchStatus = statusFilter === "" || movie.statusId === parseInt(statusFilter);
     return matchName && matchStatus;
   });
 
-  const handleDelete = async (movieId) => {
-    if (window.confirm('Are you sure you want to delete this movie?')) {
-      try {
-        const response = await fetch(`${API_URL}/movies/${movieId}`, {
-          method: 'DELETE'
-        });
+  // --- Tính toán phân trang ---
+  const indexOfLastMovie = currentPage * moviesPerPage;
+  const indexOfFirstMovie = indexOfLastMovie - moviesPerPage;
+  const currentMovies = filteredMovies.slice(indexOfFirstMovie, indexOfLastMovie);
+  const totalPages = Math.ceil(filteredMovies.length / moviesPerPage);
 
-        if (!response.ok) {
-          throw new Error('Failed to delete movie');
-        }
+  // Reset về trang 1 khi tìm kiếm hoặc lọc
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [searchTerm, statusFilter]);
 
-        setMovies(movies.filter(m => m.id !== movieId));
-        alert('Movie deleted successfully!');
-      } catch (error) {
-        console.error('Error deleting movie:', error);
-        alert('Failed to delete movie. Please try again.');
-      }
-    }
-  };
+  const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
-  if (loading) {
-    return (
-      <div className="container py-4">
-        <div className="text-center">
-          <div className="spinner-border text-primary" role="status">
-            <span className="visually-hidden">Loading...</span>
-          </div>
-          <p className="mt-2">Loading data...</p>
-        </div>
-      </div>
-    );
-  }
+  const getStatusLabel = (id) => movieStatus.find((s) => s.id === id)?.label || "N/A";
+  const getAgeRatingCode = (id) => ageRatings.find((r) => r.id === id)?.code || "N/A";
+
+  if (loading) return (
+    <Container className="py-5 text-center"><Spinner animation="border" /></Container>
+  );
 
   return (
     <div className="container py-4">
       <div className="d-flex justify-content-between align-items-center mb-4">
-        <h1 className="fw-bold">Movie List</h1>
-        <Button variant="primary" onClick={() => navigate('/add-movie')}>
-          + Add New Movie
-        </Button>
+        <h2 className="fw-bold">🎬 MOVIE MANAGEMENT</h2>
+        <Button variant="success" onClick={() => navigate('/add-movie')}>+ Add Movie</Button>
       </div>
 
-      {/* Filter */}
-      <Card className="shadow-sm mb-4">
+      {/* Filter Section */}
+      <Card className="shadow-sm mb-4 border-0 bg-light">
         <Card.Body>
           <Row className="g-3">
-            <Col md={6}>
-              <Form.Control
-                type="text"
-                placeholder="Search by movie title..."
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
+            <Col md={8}>
+              <Form.Control 
+                placeholder="Search..." 
+                value={searchTerm} 
+                onChange={(e) => setSearchTerm(e.target.value)} 
               />
             </Col>
-
-            <Col md={6}>
-              <Form.Select
-                value={statusFilter}
-                onChange={(e) => setStatusFilter(e.target.value)}
-              >
-                <option value="">All status</option>
-                {movieStatus.map((status) => (
-                  <option key={status.id} value={status.id}>
-                    {status.label}
-                  </option>
-                ))}
+            <Col md={4}>
+              <Form.Select value={statusFilter} onChange={(e) => setStatusFilter(e.target.value)}>
+                <option value="">All Status</option>
+                {movieStatus.map(s => <option key={s.id} value={s.id}>{s.label}</option>)}
               </Form.Select>
             </Col>
           </Row>
         </Card.Body>
       </Card>
 
-      <Row className="g-4">
-        {filteredMovies.map((movie) => (
-          <Col key={movie.id} xs={12} sm={6} lg={4} xl={3}>
-            <Card className="h-100 shadow-sm">
-              <div className="position-relative">
-                <Card.Img
-                  variant="top"
-                  src={movie.poster}
-                  style={{ height: "300px", objectFit: "cover" }}
-                  onError={(e) => {
-                    e.target.src = 'https://via.placeholder.com/300x450?text=No+Image';
-                  }}
-                />
+      {/* Table Section */}
+      <Card className="shadow-sm border-0 overflow-hidden mb-3">
+        <Table hover align="middle" className="mb-0">
+          <thead className="table-dark">
+            <tr>
+              <th>Poster</th>
+              <th>Title</th>
+              <th>Genre</th>
+              <th>Duration</th>
+              <th>Rating</th>
+              <th className="text-center">Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            {currentMovies.map((movie) => (
+              <tr key={movie.id}>
+                <td><img src={movie.poster} alt="p" style={{ width: '40px', borderRadius: '4px' }} /></td>
+                <td><div className="fw-bold">{movie.title}</div></td>
+                <td><small>{Array.isArray(movie.genre) ? movie.genre.join(", ") : movie.genre}</small></td>
+                <td>{movie.duration}m</td>
+                <td><Badge bg="warning" text="dark">{getAgeRatingCode(movie.ageRatingId)}</Badge></td>
+                <td className="text-center">
+                  <Button variant="outline-primary" size="sm" className="me-2" onClick={() => navigate(`/movie-detail/${movie.id}`)}>View</Button>
+                  <Button variant="outline-danger" size="sm">Delete</Button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </Table>
+      </Card>
 
-                <Badge
-                  bg={getStatusBadge(movie.statusId)}
-                  className="position-absolute top-0 end-0 m-2"
-                >
-                  {getStatusLabel(movie.statusId)}
-                </Badge>
-              </div>
+      {/* --- UI Phân trang --- */}
+      {totalPages > 1 && (
+        <div className="d-flex justify-content-center mt-4">
+          <Pagination>
+            <Pagination.First onClick={() => paginate(1)} disabled={currentPage === 1} />
+            <Pagination.Prev onClick={() => paginate(currentPage - 1)} disabled={currentPage === 1} />
+            
+            {[...Array(totalPages)].map((_, index) => (
+              <Pagination.Item 
+                key={index + 1} 
+                active={index + 1 === currentPage}
+                onClick={() => paginate(index + 1)}
+              >
+                {index + 1}
+              </Pagination.Item>
+            ))}
 
-              <Card.Body>
-                <Card.Title className="text-truncate" title={movie.title}>
-                  {movie.title}
-                </Card.Title>
-
-                <div className="text-muted small mb-2">
-                  <strong>Genre: </strong>
-                  {Array.isArray(movie.genre) ? movie.genre.join(", ") : movie.genre}
-                </div>
-
-                <div className="d-flex justify-content-between align-items-center mb-2">
-                  <div>
-                    <strong>Duration:</strong> {movie.duration} min
-                  </div>
-
-                  <Badge bg="warning" text="dark">
-                    {getAgeRatingCode(movie.ageRatingId)}
-                  </Badge>
-                </div>
-
-                <div className="d-flex gap-2">
-                  <Button 
-                    variant="primary" 
-                    size="sm" 
-                    className="flex-fill"
-                    onClick={() => navigate(`/movie-detail/${movie.id}`)}
-                  >
-                    View
-                  </Button>
-                  <Button 
-                    variant="success" 
-                    size="sm" 
-                    className="flex-fill"
-                    onClick={() => navigate(`/edit-movie/${movie.id}`)}
-                  >
-                    Edit
-                  </Button>
-                  <Button 
-                    variant="danger" 
-                    size="sm"
-                    onClick={() => handleDelete(movie.id)}
-                  >
-                    Delete
-                  </Button>
-                </div>
-              </Card.Body>
-            </Card>
-          </Col>
-        ))}
-      </Row>
-
-      {filteredMovies.length === 0 && (
-        <Card className="shadow-sm text-center py-5 mt-4">
-          <Card.Body>
-            <h4 className="mb-2">No movies found</h4>
-            <p className="text-muted">Try changing the filter or add a new movie</p>
-          </Card.Body>
-        </Card>
+            <Pagination.Next onClick={() => paginate(currentPage + 1)} disabled={currentPage === totalPages} />
+            <Pagination.Last onClick={() => paginate(totalPages)} disabled={currentPage === totalPages} />
+          </Pagination>
+        </div>
       )}
 
-      <div className="text-center text-muted mt-4">
-        Showing {filteredMovies.length} movie(s)
+      <div className="text-center text-muted mt-2 small">
+        Showing {indexOfFirstMovie + 1} to {Math.min(indexOfLastMovie, filteredMovies.length)} of {filteredMovies.length} movies
       </div>
     </div>
   );
