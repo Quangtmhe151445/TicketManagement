@@ -208,9 +208,34 @@ const AddMovie = () => {
     const ws = XLSX.utils.json_to_sheet(template);
     const wb = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(wb, ws, "Movies");
+
+    const reference = [
+      { Category: "Publishers", ID: "", Name: "", Country: "" },
+      ...publishers.map((p) => ({
+        Category: "",
+        ID: p.id,
+        Name: p.name,
+        Country: p.country,
+      })),
+      { Category: "", ID: "", Name: "", Country: "" },
+      { Category: "Age Ratings", ID: "", Code: "", Description: "" },
+      ...ageRatings.map((r) => ({
+        Category: "",
+        ID: r.id,
+        Code: r.code,
+        Description: r.description,
+      })),
+      { Category: "", ID: "", Name: "", Country: "" },
+      { Category: "Movie Status", ID: "", Label: "" },
+      ...movieStatus.map((s) => ({ Category: "", ID: s.id, Label: s.label })),
+    ];
+
+    const wsRef = XLSX.utils.json_to_sheet(reference);
+    XLSX.utils.book_append_sheet(wb, wsRef, "Reference Data");
+    // ===================================
+
     XLSX.writeFile(wb, "movie_import_template.xlsx");
   };
-
   if (loading) {
     return (
       <div className="min-vh-100 d-flex align-items-center justify-content-center">

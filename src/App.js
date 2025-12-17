@@ -46,7 +46,7 @@ function App() {
   return (
     <Router>
       {/* Truyền user và hàm logout vào Navbar */}
-      <MyNav user={user} onLogout={handleLogout} />
+      <MyNav user={user}  onLogout={handleLogout} />
 
       <Routes>
 
@@ -88,8 +88,12 @@ function App() {
           element={user ? <Timetable /> : <Navigate to="/" />}
         />
         <Route
-          path="/"
+          path="/login"
           element={!user ? <Login onLogin={handleLogin} /> : <Home />}
+        />
+          <Route
+          path="/"
+          element={user ? <Home /> : <Navigate to="/" />}
         />
         <Route path="/register" element={<Register />} />
       </Routes>

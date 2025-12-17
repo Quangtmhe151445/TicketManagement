@@ -59,11 +59,8 @@ function MyNav({ user, onLogout }) {
               </>
             ) : (
               <>
-                <Button variant="outline-info" size="sm" as={Link} to="/">
+                <Button variant="outline-info" size="sm" as={Link} to="/login">
                   Login
-                </Button>
-                <Button variant="warning" size="sm" as={Link} to="/register">
-                  Register Admin
                 </Button>
               </>
             )}
