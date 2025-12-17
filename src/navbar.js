@@ -1,34 +1,25 @@
-import React, { useState } from "react";
-import Button from "react-bootstrap/Button";
-import Container from "react-bootstrap/Container";
-import Form from "react-bootstrap/Form";
-import Nav from "react-bootstrap/Nav";
-import Navbar from "react-bootstrap/Navbar";
-import NavDropdown from "react-bootstrap/NavDropdown";
+import React from "react";
+import { Button, Container, Nav, Navbar } from "react-bootstrap";
 import { Link, useNavigate } from "react-router-dom";
 
-function MyNav() {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+function MyNav({ user, onLogout }) {
   const navigate = useNavigate();
 
-  const handleAuthClick = () => {
-    if (!isLoggedIn) {
-      // Giả lập logic đăng nhập, chuyển hướng đến /timetable (như trong code gốc)
-      navigate("/timetable"); 
-    } else {
-      // Giả lập logic đăng xuất
-      navigate("/");
-
-      alert("Logged out successfully!"); // Đổi alert cho đúng logic
-    }
-
-    setIsLoggedIn(!isLoggedIn);
+  const handleLogoutClick = () => {
+    // 1. Gọi hàm xóa trạng thái user (từ props App.js truyền xuống)
+    onLogout(); 
+    
+    // 2. Chuyển hướng về trang chủ ngay lập tức
+    navigate("/"); 
+    
+    // 3. Thông báo (Tùy chọn)
+    console.log("User logged out");
   };
 
   return (
-    <Navbar expand="lg" bg="dark" data-bs-theme="dark" className="shadow-lg">
+    <Navbar expand="lg" bg="dark" data-bs-theme="dark" className="shadow-lg py-3">
       <Container fluid>
-        <Navbar.Brand as={Link} to="/">
+        <Navbar.Brand as={Link} to="/" className="fw-bold">
           <i className="bi bi-film me-2"></i>Cinema Admin
         </Navbar.Brand>
 
@@ -36,46 +27,43 @@ function MyNav() {
 
         <Navbar.Collapse id="navbarScroll">
           <Nav className="me-auto my-2 my-lg-0" navbarScroll>
-            {isLoggedIn && (
+            {user && (
               <>
-                <Nav.Link as={Link} to="/ticket">
-                  <i className="bi bi-ticket-perforator-fill me-1"></i> Ticket
-                  Management
-                </Nav.Link>
-
-                <Nav.Link as={Link} to="/movie-list">
-                  <i className="bi bi-collection-play me-1"></i> Film Management
-                </Nav.Link>
-                
-                {/* Đã thêm link Quản lý Phòng Chiếu */}
-                <Nav.Link as={Link} to="/cinema-rooms">
-                  <i className="bi bi-display me-1"></i> Cinema Room Management
-                </Nav.Link>
-                
-                <Nav.Link as={Link} to="/popcorn">
-                  <i className="bi bi-door-open-fill me-1"></i> PopCorn
-                  Management
-                </Nav.Link>
-
-                <Nav.Link as={Link} to="/timetable">
-                  <i className="bi bi-door-open-fill me-1"></i> TimeTable
-                </Nav.Link>
+                <Nav.Link as={Link} to="/ticket">Ticket</Nav.Link>
+                <Nav.Link as={Link} to="/movie-list">Film</Nav.Link>
+                <Nav.Link as={Link} to="/cinema-rooms">Rooms</Nav.Link>
+                <Nav.Link as={Link} to="/showtimes">ShowTimes</Nav.Link>
+                <Nav.Link as={Link} to="/popcorn">PopCorn</Nav.Link>
+                <Nav.Link as={Link} to="/timetable">TimeAble</Nav.Link>
               </>
             )}
           </Nav>
 
-          <Nav>
-            <Nav.Link onClick={handleAuthClick}>
-              {isLoggedIn ? (
-                <Button variant="outline-danger" size="sm">
-                  <i className="bi bi-box-arrow-right me-1"></i> Logout
+          <Nav className="d-flex align-items-center gap-3">
+            {user ? (
+              <>
+                <div className="text-light me-2">
+                  <small className="text-muted text-uppercase d-block" style={{ fontSize: '0.7rem' }}>Logged in as</small>
+                  <span className="fw-medium">{user.name}</span>
+                </div>
+                
+                {user.role === "admin" && (
+                  <Button variant="outline-warning" size="sm" as={Link} to="/register">
+                    + Add Staff
+                  </Button>
+                )}
+                
+                <Button variant="danger" size="sm" onClick={handleLogoutClick} className="px-3">
+                  Logout
                 </Button>
-              ) : (
-                <Button variant="outline-info" size="sm">
-                  <i className="bi bi-box-arrow-in-right me-1"></i> Login
+              </>
+            ) : (
+              <>
+                <Button variant="outline-info" size="sm" as={Link} to="/login">
+                  Login
                 </Button>
-              )}
-            </Nav.Link>
+              </>
+            )}
           </Nav>
         </Navbar.Collapse>
       </Container>

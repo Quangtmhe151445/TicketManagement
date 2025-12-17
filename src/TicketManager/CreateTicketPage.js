@@ -35,18 +35,19 @@ const getCalculatedBasePrice = (roomName, roomType, priceRules) => {
   return rule ? rule.price : 0;
 };
 
+// --- CHỈ SỬA HÀM NÀY: SINH ID TỰ TĂNG 1, 2, 3... ---
 const generateNewShowtimeId = (showtimes) => {
   if (!showtimes || showtimes.length === 0) {
-    return "st001";
+    return "1";
   }
 
+  // Chuyển tất cả ID hiện có về số nguyên và tìm Max
   const maxId = showtimes.reduce((max, st) => {
-    const num = parseInt(st.id.slice(2));
-    return num > max ? num : max;
+    const num = parseInt(st.id); // Chuyển "1", "2" hoặc "st001" thành số
+    return !isNaN(num) && num > max ? num : max;
   }, 0);
 
-  const newNum = maxId + 1;
-  return `st${newNum.toString().padStart(3, "0")}`;
+  return (maxId + 1).toString(); // Trả về số tiếp theo dưới dạng chuỗi
 };
 
 function CreateTicketPage() {
@@ -60,16 +61,16 @@ function CreateTicketPage() {
     movies: [],
     cinema_rooms: [],
     showtimes: [],
-    price_rules: [], 
+    price_rules: [],
   });
 
   const [formData, setFormData] = useState({
-    Showtime: "", 
-    Film: "", 
-    Room: "", 
-    Type: "", 
-    RoomCategory: "", 
-    status: "open", 
+    Showtime: "",
+    Film: "",
+    Room: "",
+    Type: "",
+    RoomCategory: "",
+    status: "open",
   });
 
   useEffect(() => {
@@ -78,7 +79,7 @@ function CreateTicketPage() {
       "http://localhost:9999/movies",
       "http://localhost:9999/cinema_rooms",
       "http://localhost:9999/showtimes",
-      "http://localhost:9999/price_rules", 
+      "http://localhost:9999/price_rules",
     ];
 
     axios
@@ -92,7 +93,7 @@ function CreateTicketPage() {
             movies: moviesData,
             cinema_rooms: roomsData,
             showtimes: showtimesRes.data,
-            price_rules: rulesRes.data, 
+            price_rules: rulesRes.data,
           });
 
           if (moviesData.length > 0 && roomsData.length > 0) {
@@ -119,15 +120,13 @@ function CreateTicketPage() {
   }, []);
 
   const selectedRoomName = useMemo(() => {
-    return dataLoaded.cinema_rooms.find(
-        (r) => r.id === formData.Room
-      )?.name;
+    return dataLoaded.cinema_rooms.find((r) => r.id === formData.Room)?.name;
   }, [formData.Room, dataLoaded.cinema_rooms]);
-  
+
   const calculatedBasePrice = useMemo(() => {
     return getCalculatedBasePrice(
-      selectedRoomName, 
-      formData.Type, 
+      selectedRoomName,
+      formData.Type,
       dataLoaded.price_rules
     );
   }, [selectedRoomName, formData.Type, dataLoaded.price_rules]);
@@ -135,7 +134,7 @@ function CreateTicketPage() {
   const handleChange = useCallback(
     (e) => {
       const { id, value } = e.target;
-      setError(null); 
+      setError(null);
 
       setFormData((prev) => {
         let newState = { ...prev, [id]: value };
@@ -159,7 +158,7 @@ function CreateTicketPage() {
   );
 
   const handleCancel = () => {
-    navigate("/ticket"); 
+    navigate("/ticket");
   };
 
   const handleSave = async (e) => {
@@ -173,6 +172,7 @@ function CreateTicketPage() {
     setIsSubmitting(true);
     setError(null);
 
+    // ID sinh ra sẽ là "1", "2", "3"...
     const newId = generateNewShowtimeId(dataLoaded.showtimes);
 
     const dataToSave = {
@@ -181,16 +181,16 @@ function CreateTicketPage() {
       room_id: formData.Room,
       start_time: formData.Showtime,
       status: formData.status,
-      tickets_sold: 0, 
+      tickets_sold: 0,
     };
 
     try {
-      const response = await axios.post(
-        "http://localhost:9999/showtimes",
-        dataToSave
+      await axios.post("http://localhost:9999/showtimes", dataToSave);
+      alert(
+        `Showtime ${newId} created successfully! Base Price: ${formatCurrency(
+          calculatedBasePrice
+        )}`
       );
-      console.log(`Creation successful:`, response.data);
-      alert(`Showtime ${newId} created successfully! Base Price: ${formatCurrency(calculatedBasePrice)}`);
       navigate("/ticket");
     } catch (error) {
       console.error("Error saving new showtime:", error);
@@ -247,7 +247,11 @@ function CreateTicketPage() {
                   </option>
                   {dataLoaded.movies.map((movie) => (
                     <option key={movie.id} value={movie.id}>
-                      {movie.title} ({movie.status === 'coming_soon' ? 'Coming soon' : 'Now showing'})
+                      {movie.title} (
+                      {movie.status === "coming_soon"
+                        ? "Coming soon"
+                        : "Now showing"}
+                      )
                     </option>
                   ))}
                 </Form.Select>
