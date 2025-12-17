@@ -7,27 +7,9 @@
       "status": "active",
       "total_seats": 150,
       "seat_map": [
-        [
-          "A1",
-          "A2",
-          "A3",
-          "A4",
-          "A5"
-        ],
-        [
-          "B1",
-          "B2",
-          "B3",
-          "B4",
-          "B5"
-        ],
-        [
-          "C1",
-          "C2",
-          "C3",
-          "C4",
-          "C5"
-        ]
+        ["A1", "A2", "A3", "A4", "A5"],
+        ["B1", "B2", "B3", "B4", "B5"],
+        ["C1", "C2", "C3", "C4", "C5"]
       ],
       "seat_types": {
         "A": "Standard",
@@ -42,21 +24,9 @@
       "status": "active",
       "total_seats": 100,
       "seat_map": [
-        [
-          "A1",
-          "A2",
-          "A3"
-        ],
-        [
-          "B1",
-          "B2",
-          "B3"
-        ],
-        [
-          "C1",
-          "C2",
-          "C3"
-        ]
+        ["A1", "A2", "A3"],
+        ["B1", "B2", "B3"],
+        ["C1", "C2", "C3"]
       ],
       "seat_types": {
         "A": "VIP",
@@ -70,18 +40,8 @@
       "type": "2D Standard",
       "status": "maintenance",
       "seat_map": [
-        [
-          "A1",
-          "A2",
-          "A3",
-          "A4"
-        ],
-        [
-          "B1",
-          "B2",
-          "B3",
-          "B4"
-        ]
+        ["A1", "A2", "A3", "A4"],
+        ["B1", "B2", "B3", "B4"]
       ],
       "seat_types": {
         "A": "Standard",
@@ -96,20 +56,8 @@
       "status": "active",
       "total_seats": 150,
       "seat_map": [
-        [
-          "A1",
-          "A2",
-          "A3",
-          "A4",
-          "A5"
-        ],
-        [
-          "B1",
-          "B2",
-          "B3",
-          "B4",
-          "B5"
-        ]
+        ["A1", "A2", "A3", "A4", "A5"],
+        ["B1", "B2", "B3", "B4", "B5"]
       ],
       "seat_types": {
         "A": "Standard",
@@ -123,20 +71,8 @@
       "status": "active",
       "total_seats": 150,
       "seat_map": [
-        [
-          "A1",
-          "A2",
-          "A3",
-          "A4",
-          "A5"
-        ],
-        [
-          "B1",
-          "B2",
-          "B3",
-          "B4",
-          "B5"
-        ]
+        ["A1", "A2", "A3", "A4", "A5"],
+        ["B1", "B2", "B3", "B4", "B5"]
       ],
       "seat_types": {
         "A": "Standard",
@@ -150,18 +86,8 @@
       "status": "active",
       "total_seats": 120,
       "seat_map": [
-        [
-          "A1",
-          "A2",
-          "A3",
-          "A4"
-        ],
-        [
-          "B1",
-          "B2",
-          "B3",
-          "B4"
-        ]
+        ["A1", "A2", "A3", "A4"],
+        ["B1", "B2", "B3", "B4"]
       ],
       "seat_types": {
         "A": "Standard",
@@ -175,15 +101,8 @@
       "status": "active",
       "total_seats": 80,
       "seat_map": [
-        [
-          "A1",
-          "A2",
-          "A3"
-        ],
-        [
-          "B1",
-          "B2"
-        ]
+        ["A1", "A2", "A3"],
+        ["B1", "B2"]
       ],
       "seat_types": {
         "A": "VIP",
@@ -197,15 +116,8 @@
       "status": "active",
       "total_seats": 90,
       "seat_map": [
-        [
-          "A1",
-          "A2",
-          "A3"
-        ],
-        [
-          "B1",
-          "B2"
-        ]
+        ["A1", "A2", "A3"],
+        ["B1", "B2"]
       ],
       "seat_types": {
         "A": "VIP",
@@ -597,7 +509,7 @@
   ],
   "showtimes": [
     {
-      "id": "st001",
+      "id": "1",
       "movie_id": "4",
       "room_id": "room02",
       "start_time": "2025-12-15T10:00:00",
@@ -606,7 +518,7 @@
       "tickets_sold": 25
     },
     {
-      "id": "st002",
+      "id": "2",
       "movie_id": "3",
       "room_id": "room07",
       "start_time": "2025-12-15T13:00:00",
@@ -615,7 +527,7 @@
       "tickets_sold": 90
     },
     {
-      "id": "st003",
+      "id": "3",
       "movie_id": "2",
       "room_id": "room01",
       "start_time": "2025-12-15T15:00:00",
@@ -624,7 +536,7 @@
       "tickets_sold": 15
     },
     {
-      "id": "st004",
+      "id": "4",
       "movie_id": "1",
       "room_id": "room03",
       "start_time": "2025-12-15T18:00:00",
@@ -633,11 +545,19 @@
       "tickets_sold": 100
     },
     {
-      "id": "5de3",
+      "id": "5",
       "movie_id": "1",
       "room_id": "room01",
       "start_time": "2025-12-17T15:24:00.000Z",
       "end_time": "2025-12-17T10:10:00.000Z",
+      "status": "open",
+      "tickets_sold": 0
+    },
+    {
+      "id": "6",
+      "movie_id": "3",
+      "room_id": "room02",
+      "start_time": "2025-12-20T13:43",
       "status": "open",
       "tickets_sold": 0
     }
@@ -710,14 +630,8 @@
       "price": 5500,
       "stock": 6,
       "threshold": 5,
-      "allowed_days": [
-        "weekday"
-      ],
-      "allowed_ticket_types": [
-        "3D",
-        "2D",
-        "IMAX"
-      ],
+      "allowed_days": ["weekday"],
+      "allowed_ticket_types": ["3D", "2D", "IMAX"],
       "image": "https://m.media-amazon.com/images/I/91Rpt4H6zgL._SX679_PIbundle-3,TopRight,0,0_AA679SH20_.jpg",
       "description": "",
       "status": "active"
@@ -731,14 +645,8 @@
       "price": 45000,
       "stock": 19,
       "threshold": 6,
-      "allowed_days": [
-        "weekend",
-        "weekday",
-        "holiday"
-      ],
-      "allowed_ticket_types": [
-        "3D"
-      ],
+      "allowed_days": ["weekend", "weekday", "holiday"],
+      "allowed_ticket_types": ["3D"],
       "image": "https://www.cook2eatwell.com/wp-content/uploads/2020/09/Caramel-Popcorn-Image.jpg",
       "description": "Sweet caramel popcorn, crispy and light.",
       "status": "active"
@@ -752,14 +660,8 @@
       "price": 25000,
       "stock": 30,
       "threshold": 10,
-      "allowed_days": [
-        "weekday"
-      ],
-      "allowed_ticket_types": [
-        "2D",
-        "3D",
-        "IMAX"
-      ],
+      "allowed_days": ["weekday"],
+      "allowed_ticket_types": ["2D", "3D", "IMAX"],
       "image": "https://kosherkingdom.com/api/content/images/thumbs/0294987_coca-cola-small-coke-zero-bottles-500-ml.jpeg",
       "description": "Chilled Coca Cola, small size.",
       "status": "inactive"
@@ -773,14 +675,8 @@
       "price": 75000,
       "stock": 10,
       "threshold": 3,
-      "allowed_days": [
-        "weekday"
-      ],
-      "allowed_ticket_types": [
-        "VIP",
-        "2D",
-        "IMAX"
-      ],
+      "allowed_days": ["weekday"],
+      "allowed_ticket_types": ["VIP", "2D", "IMAX"],
       "image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSnO7fjc6KsEy3rpIvo_msfo9x7HST307tKQQ&s",
       "description": "1 popcorn M + 1 Pepsi M. IMAX weekend only.",
       "status": "inactive"
@@ -794,14 +690,8 @@
       "stock": 3,
       "image": "https://jbagy.me/wp-content/uploads/2025/03/Hinh-anh-doremon-cute-1.jpg",
       "description": "AAAA",
-      "allowed_days": [
-        "weekday",
-        "weekend"
-      ],
-      "allowed_ticket_types": [
-        "3D",
-        "2D"
-      ],
+      "allowed_days": ["weekday", "weekend"],
+      "allowed_ticket_types": ["3D", "2D"],
       "status": "active"
     },
     {
@@ -813,12 +703,8 @@
       "stock": 99999999999999,
       "image": "https://m.media-amazon.com/images/I/91Rpt4H6zgL._SX679_PIbundle-3,TopRight,0,0_AA679SH20_.jpg",
       "description": "",
-      "allowed_days": [
-        "holiday"
-      ],
-      "allowed_ticket_types": [
-        "3D"
-      ],
+      "allowed_days": ["holiday"],
+      "allowed_ticket_types": ["3D"],
       "status": "active"
     },
     {
@@ -830,17 +716,8 @@
       "stock": 6,
       "image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRWd8twKb78lNX8fZpedM37suawcKtnSNwx0Q&s",
       "description": "như cc",
-      "allowed_days": [
-        "weekend",
-        "holiday",
-        "weekday"
-      ],
-      "allowed_ticket_types": [
-        "3D",
-        "2D",
-        "IMAX",
-        "VIP"
-      ],
+      "allowed_days": ["weekend", "holiday", "weekday"],
+      "allowed_ticket_types": ["3D", "2D", "IMAX", "VIP"],
       "status": "active"
     },
     {
@@ -852,17 +729,8 @@
       "stock": 1,
       "image": "https://th.bing.com/th/id/R.f3daece4d91f95eef7de15d4bdd73c62?rik=Ga6fK2sX2mZYXw&riu=http%3a%2f%2fwww.melaniecooks.com%2fwp-content%2fuploads%2f2018%2f02%2fcaramel_popcorn_recipe.jpg&ehk=NWQhVIJ%2b1EUKQ4Y%2fY9TPw4ac%2bdra8227ozCg3aIGX2Q%3d&risl=&pid=ImgRaw&r=0",
       "description": "",
-      "allowed_days": [
-        "weekend",
-        "holiday",
-        "weekday"
-      ],
-      "allowed_ticket_types": [
-        "2D",
-        "3D",
-        "IMAX",
-        "VIP"
-      ],
+      "allowed_days": ["weekend", "holiday", "weekday"],
+      "allowed_ticket_types": ["2D", "3D", "IMAX", "VIP"],
       "status": "active"
     }
   ],
@@ -971,61 +839,61 @@
   ],
   "publishers": [
     {
-      "id": "1",
+      "id": 1,
       "name": "Studio Ghibli",
       "country": "Japan"
     },
     {
-      "id": "2",
+      "id": 2,
       "name": "Disney",
       "country": "USA"
     },
     {
-      "id": "3",
+      "id": 3,
       "name": "Toho",
       "country": "Japan"
     },
     {
-      "id": "4",
+      "id": 4,
       "name": "Warner Bros",
       "country": "USA"
     }
   ],
   "ageRatings": [
     {
-      "id": "1",
+      "id": 1,
       "code": "P",
       "description": "Suitable for all ages"
     },
     {
-      "id": "2",
+      "id": 2,
       "code": "C13",
       "description": "Not suitable for audiences under 13 years old"
     },
     {
-      "id": "3",
+      "id": 3,
       "code": "C16",
       "description": "Not suitable for audiences under 16 years old"
     },
     {
-      "id": "4",
+      "id": 4,
       "code": "C18",
       "description": "Not suitable for audiences under 18 years old"
     }
   ],
   "movieStatus": [
     {
-      "id": "1",
+      "id": 1,
       "code": "now-showing",
       "label": "Now Showing"
     },
     {
-      "id": "2",
+      "id": 2,
       "code": "coming-soon",
       "label": "Coming Soon"
     },
     {
-      "id": "3",
+      "id": 3,
       "code": "ended",
       "label": "No Longer Showing"
     }
@@ -1033,10 +901,7 @@
   "movies": [
     {
       "title": "Your Name",
-      "genre": [
-        "Romance",
-        "Drama"
-      ],
+      "genre": ["Romance", "Drama"],
       "duration": 106,
       "poster": "https://upload.wikimedia.org/wikipedia/vi/thumb/b/b3/Your_Name_novel.jpg/330px-Your_Name_novel.jpg",
       "trailer": "https://youtu.be/xU47nhruN-Q",
@@ -1048,10 +913,7 @@
     {
       "id": "2",
       "title": "Spirited Away",
-      "genre": [
-        "Fantasy",
-        "Adventure"
-      ],
+      "genre": ["Fantasy", "Adventure"],
       "duration": 125,
       "poster": "https://upload.wikimedia.org/wikipedia/vi/3/30/Spirited_Away_poster.JPG",
       "trailer": "https://youtu.be/ByXuk9QqQkk",
@@ -1062,10 +924,7 @@
     {
       "id": "3",
       "title": "The Dark Knight",
-      "genre": [
-        "Action",
-        "Crime"
-      ],
+      "genre": ["Action", "Crime"],
       "duration": 152,
       "poster": "https://upload.wikimedia.org/wikipedia/en/1/1c/The_Dark_Knight_%282008_film%29.jpg",
       "trailer": "https://youtu.be/EXeTwQWrcwY",
@@ -1076,10 +935,7 @@
     {
       "id": "4",
       "title": "Inception",
-      "genre": [
-        "Sci-Fi",
-        "Thriller"
-      ],
+      "genre": ["Sci-Fi", "Thriller"],
       "duration": 148,
       "poster": "https://upload.wikimedia.org/wikipedia/vi/1/11/Inception_poster_1.jpg",
       "trailer": "https://youtu.be/YoHD9XEInc0",
@@ -1090,9 +946,7 @@
     {
       "id": "4a33",
       "title": "hello",
-      "genre": [
-        "Action"
-      ],
+      "genre": ["Action"],
       "duration": 120,
       "poster": "https://th.bing.com/th/id/R.f3daece4d91f95eef7de15d4bdd73c62?rik=Ga6fK2sX2mZYXw&riu=http%3a%2f%2fwww.melaniecooks.com%2fwp-content%2fuploads%2f2018%2f02%2fcaramel_popcorn_recipe.jpg&ehk=NWQhVIJ%2b1EUKQ4Y%2fY9TPw4ac%2bdra8227ozCg3aIGX2Q%3d&risl=&pid=ImgRaw&r=0",
       "trailer": "https://youtu.be/xU47nhruN-Q",
