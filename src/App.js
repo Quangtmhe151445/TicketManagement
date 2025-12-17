@@ -11,7 +11,7 @@ import EditMovie from "./movie_management/edit-movie.js";
 import MovieDetail from "./movie_management/movie-detail.js";
 import MovieList from "./movie_management/list-movie.js";
 import CreateTicketPage from "./TicketManager/CreateTicketPage.js";
-import Timetable from "./timeTable/PersonnelManagement.js";
+import Timetable from "./TimeTable/PersonnelManagement.js";
 import Home from "./Home.js";
 
 function App() {

@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { Button, Form, Card, Container } from "react-bootstrap";
+import logincss from "./css/Login.css";
 
 const Login = ({ onLogin }) => {
   const [username, setUsername] = useState("");
@@ -36,35 +37,41 @@ const Login = ({ onLogin }) => {
   };
 
   return (
-    <Container className="py-5">
-      <Card className="p-4 mx-auto shadow" style={{ maxWidth: "400px" }}>
-        <h4 className="mb-3 text-center">🔐 Login</h4>
-        <Form onSubmit={handleLogin}>
-          <Form.Group className="mb-3">
-            <Form.Label>Username</Form.Label>
-            <Form.Control
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
-              required
-            />
-          </Form.Group>
+    <div className="login-overlay">
+      <Container className="d-flex align-items-center justify-content-center min-vh-100">
+        <Card
+          className="p-4 shadow "
+          style={{ maxWidth: "400px", width: "100%" }}
+        >
+          <h4 className="mb-3 text-center">🔐 Login</h4>
 
-          <Form.Group className="mb-3">
-            <Form.Label>Password</Form.Label>
-            <Form.Control
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-            />
-          </Form.Group>
+          <Form onSubmit={handleLogin}>
+            <Form.Group className="mb-3">
+              <Form.Label>Username</Form.Label>
+              <Form.Control
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
+                required
+              />
+            </Form.Group>
 
-          <Button type="submit" variant="primary" className="w-100">
-            Login
-          </Button>
-        </Form>
-      </Card>
-    </Container>
+            <Form.Group className="mb-3">
+              <Form.Label>Password</Form.Label>
+              <Form.Control
+                type="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
+              />
+            </Form.Group>
+
+            <Button type="submit" className="w-100">
+              Login
+            </Button>
+          </Form>
+        </Card>
+      </Container>
+    </div>
   );
 };
 
